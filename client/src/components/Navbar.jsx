@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react'
+import { SignInButton, SignUpButton, UserButton, useUser, SignedIn } from '@clerk/clerk-react'
+import SyncUsers from './SyncUsers'
 
 const Navbar = () => {
+
   const { isSignedIn } = useUser()
 
   const navlinks = [
@@ -14,6 +16,7 @@ const Navbar = () => {
   ]
 
   return (
+    
     <div className="w-full shadow-sm">
       <nav className='flex justify-between items-center px-6 py-4 bg-white shadow-sm max-w-6xl mx-auto'>
         {/* Left - Logo and first 3 links */}
@@ -27,18 +30,22 @@ const Navbar = () => {
             ))}
           </div>
         </div>
-
+        <SignedIn>
+        <SyncUsers />
+      </SignedIn>
         {/* Right - Auth buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4" >
           {!isSignedIn ? (
             navlinks.slice(3).map((link, idx) => {
               if (link.name === "For Sellers") {
                 return (
+                  <div key={idx}>
                   <SignUpButton key={idx} mode="modal">
                     <button className="bg-green text-white px-4 py-1 rounded-3xl text-sm font-medium hover:bg-green/90">
                       {link.name}
                     </button>
                   </SignUpButton>
+                  </div>
                 )
               } else if (link.name === "Login") {
                 return (

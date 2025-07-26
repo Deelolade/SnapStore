@@ -7,6 +7,7 @@ type ClerkRequest = RequireAuthProp<Request>
 
 export const userAuth = async(req:ClerkRequest, res:Response)=>{
   const {userId} = req.auth;
+  console.log("Clerk userId:", userId);
 
   let user = await  User.findOne({clerkId:userId})
 
@@ -21,4 +22,5 @@ export const userAuth = async(req:ClerkRequest, res:Response)=>{
     })
   }
   res.status(200).json({message: "User synced successfully", user})
+  console.log(user)
 } 
