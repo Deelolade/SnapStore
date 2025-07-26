@@ -1,82 +1,24 @@
-import { Request, Response } from "express";
-import bcryptjs from "bcryptjs";
-import { User } from "../models/user.model";
-import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/env";
-import { transporter } from "../utils/mailer"
-import { emailTemplate } from "../templates/verificationEmail";
+import {  Request ,Response } from "express";
+import { RequireAuthProp, clerkClient } from "@clerk/clerk-sdk-node";
+ import {User } from "../models/user.model";
 
 
-const sendVerificationEmail = async (email: string, token: string) => {
-const frontendBase = process.env.FRONTEND_URL || "http://localhost:3000";
-const verificationLink = `${frontendBase}/verify/${token}`;
+type ClerkRequest = RequireAuthProp<Request>
 
-  // Mail verification logic
-  await transporter.sendMail({
-    from: `Deelolade ${process.env.EMAIL_USER}`,
-    to: email,
-    subject: "Verify Your Email",
-    text: `Click the link to verify your email: ${verificationLink}`,
-    html: emailTemplate(verificationLink),
-  });
-};
+export const userAuth = async(req:ClerkRequest, res:Response)=>{
+  const {userId} = req.auth;
 
-export const signUp = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password } = req.body;
+  let user = await  User.findOne({clerkId:userId})
 
-    if (
-      !name ||
-      !email ||
-      !password ||
-      name === "" ||
-      email === "" ||
-      password === ""
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+  if(!user){
+    const newUser = await clerkClient.users.getUser(userId)
 
-    //check for existing user
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: "User Account already existed!",
-      });
-    }
-
-    // hash user passwords
-    const hashedPassword = bcryptjs.hashSync(password, 12);
-    console.log("hashedpassword:", hashedPassword);
-
-    //create new user with verification token
-    const verificationToken = jwt.sign({ email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      verificationToken,
-    });
-
-    // save new user data
-    await newUser.save();
-
-    await sendVerificationEmail(newUser.email, verificationToken);
-    res.status(201).json({
-      success: true,
-      message:
-        "User created successfully. A verification email has been sent. Please check your inbox to verify your email before logging in.",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Unable to create user's profile !",
-    });
+    user = await User.create({
+      clerkId : userId,
+      name: newUser.firstName + " " + newUser.lastName,
+      email: newUser.emailAddresses[0].emailAddress,
+      profilePicture: newUser.imageUrl,
+    })
   }
-};
+  res.status(200).json({message: "User synced successfully", user})
+} 
