@@ -11,9 +11,7 @@ const sendVerificationEmail = async (email: string, token: string) => {
 const frontendBase = process.env.FRONTEND_URL || "http://localhost:3000";
 const verificationLink = `${frontendBase}/verify/${token}`;
 
-
- 
-  // MAil verification logic
+  // Mail verification logic
   await transporter.sendMail({
     from: `Deelolade ${process.env.EMAIL_USER}`,
     to: email,
