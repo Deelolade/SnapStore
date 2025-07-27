@@ -6,7 +6,8 @@ const Index = () => {
   return (
     <div>
       <Navbar/>
-      {/* <SignUp/> */}
+      <h2 className='text-5xl'>hello world </h2>
+      <h2 className='text-5xl'>landing page</h2>
     </div>
   )
 }
