@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-react'
 import axios from 'axios';
-
+import { useDispatch } from 'react-redux';
+import { signInStart, signInSuccess, signInError} from "../redux/user/userSlice"
 
 const SyncUsers = () => {
+    const dispatch = useDispatch();
     const { getToken } = useAuth();
     const { user, isSignedIn } = useUser();
     const [hasSynced, setHasSynced] = useState(false)
@@ -21,6 +23,7 @@ const SyncUsers = () => {
                 const imageUrl = user.imageUrl;
                 
                 console.log(userId)
+                dispatch(signInStart())
                 try {
                     const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/sync`, {
                         userId,
@@ -33,10 +36,13 @@ const SyncUsers = () => {
                         },
                         withCredentials: true,
                     })
+                    dispatch(signInSuccess(response.data))
                     console.log(response.data)
                     setHasSynced(true);
                 } catch (err) {
                     console.error("User sync failed:", err);
+                    dispatch(signInError(err.message))
+
                 }
             }
         }

@@ -2,6 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { Provider } from 'react-redux'
+import { store, persistor } from './redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 
@@ -17,11 +20,13 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <Router>
-        <App />
-      </Router>
-    </ClerkProvider>
-  </StrictMode>
+  <PersistGate persistor={persistor}>
+    <Provider store={store}>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <Router>
+          <App />
+        </Router>
+      </ClerkProvider>
+    </Provider>
+  </PersistGate>
 )

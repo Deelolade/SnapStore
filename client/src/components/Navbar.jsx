@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { SignInButton, SignUpButton, UserButton, useUser, SignedIn } from '@clerk/clerk-react'
+import { SignInButton, SignUpButton, useUser, SignedIn } from '@clerk/clerk-react'
 import SyncUsers from './SyncUsers'
-import { Slot } from '@radix-ui/react-slot';
 
 const Navbar = () => {
   const navigate = useNavigate()
