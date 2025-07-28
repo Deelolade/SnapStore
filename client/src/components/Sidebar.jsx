@@ -5,11 +5,15 @@ import { RiSettings4Fill } from "react-icons/ri";
 import { LuClipboardList } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-
-
+import { FaCaretDown } from "react-icons/fa";
+import { useState } from "react";
+import LogOutModal from "./LogOutModal";
 
 const Sidebar = () => {
-
+    const  currentUser = useSelector((state) => state.user.user )
+    // console.log(currentUser)
+    const [isOpen, setIsOpen] = useState(false)
+    const [showDropdown, setShowDropdown] = useState(false)
     return (
         <>
             <aside className='bg-white w-[25%] h-screen shadow-md rounded-lg p-6  flex flex-col justify-between'>
@@ -54,14 +58,43 @@ const Sidebar = () => {
                         </NavLink>
                     </div>
                 </div>
-                <div className=" flex items-center justify-between">
-                    {/* <img src={profileImage} alt="" className='w-12 h-12 rounded-full object-cover' /> */}
-                    <div className="">
-                        <h4 className='text-lg font-semibold'>Ihionkhan Shalom</h4>
-                        <p className='text-sm text-zinc-500'>Traveler</p>
+                <div className="relative">
+                    <button className="flex items-center gap-3 hover:bg-zinc-100 p-2 rounded-md" onClick={()=>setShowDropdown((prev) => !prev)}>
+                        <img
+                            src={currentUser?.profilePicture || '/default-avatar.png'}
+                            alt=""
+                            className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="text-left">
+                            <h4 className="text-sm font-semibold">{currentUser?.name}</h4>
+                            <p className="text-xs text-zinc-500">Active Seller</p>
+                        </div>
+                        <FaCaretDown className="w-4 h-4 text-zinc-700" />
+                    </button>
+
+                    {/* Dropdown on hover or click */}
+                    {
+                        showDropdown && (
+                            <div className={`
+                                absolute right-0 bottom-full mb-2 w-48 bg-white border rounded-md shadow-md z-10 origin-top-right
+                                transform transition-transform duration-200 ease-out
+                                ${showDropdown ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}
+                              `}
+                          >
+                        <ul className="text-sm text-zinc-700">
+                            <li className="px-4 py-2 hover:bg-zinc-100 cursor-pointer">View Profile</li>
+                            <li className="px-4 py-2 hover:bg-zinc-100 cursor-pointer">Settings</li>
+                            <button onClick={()=> setIsOpen(true)} className="w-full text-left px-4 py-2 hover:bg-zinc-100 cursor-pointer text-red-500">Logout</button>
+                        </ul>
+                        <LogOutModal
+                        isOpen={isOpen}
+                        onClose={()=> setIsOpen(false)}
+                        />
                     </div>
-                    
+                        )
+                    }
                 </div>
+
             </aside>
         </>
     )

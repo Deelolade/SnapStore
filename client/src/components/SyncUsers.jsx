@@ -6,17 +6,17 @@ import { signInStart, signInSuccess, signInError} from "../redux/user/userSlice"
 
 const SyncUsers = () => {
     const dispatch = useDispatch();
-    const { getToken } = useAuth();
-    const { user, isSignedIn } = useUser();
+    const { getToken, isLoaded:authLoaded } = useAuth();
+    const { user, isSignedIn, isLoaded: userLoaded } = useUser();
     const [hasSynced, setHasSynced] = useState(false)
 
     useEffect(() => {
         const syncUser = async () => {
-            if (!isSignedIn || !user || hasSynced) return
+            if (!authLoaded || !userLoaded || !isSignedIn || !user || hasSynced) return
 
+            try {
             const token = await getToken();
             
-            if (isSignedIn && user && !hasSynced) {
                 const userId = user.id;
                 const fullName = user.fullName;
                 const email = user.primaryEmailAddress?.emailAddress;
@@ -24,7 +24,6 @@ const SyncUsers = () => {
                 
                 console.log(userId)
                 dispatch(signInStart())
-                try {
                     const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/sync`, {
                         userId,
                         email,
@@ -36,8 +35,8 @@ const SyncUsers = () => {
                         },
                         withCredentials: true,
                     })
-                    dispatch(signInSuccess(response.data))
-                    console.log(response.data)
+                    dispatch(signInSuccess(response.data.user))
+                    console.log("User synced:",response.data.user)
                     setHasSynced(true);
                 } catch (err) {
                     console.error("User sync failed:", err);
@@ -45,9 +44,8 @@ const SyncUsers = () => {
 
                 }
             }
-        }
         syncUser()
-    }, [user, isSignedIn, hasSynced]
+    }, [authLoaded, userLoaded, user, isSignedIn, hasSynced]
     )
     return null
 }

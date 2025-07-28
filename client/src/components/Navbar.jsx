@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { SignInButton, SignUpButton, useUser, SignedIn } from '@clerk/clerk-react'
+import { SignInButton, SignUpButton, useUser, SignedIn, useClerk } from '@clerk/clerk-react'
 import SyncUsers from './SyncUsers'
 
 const Navbar = () => {
@@ -12,8 +12,8 @@ const Navbar = () => {
     { name: "Features", to: "/features" },
     { name: "How It Works", to: "/how-it-works" },
     { name: "Pricing", to: "/pricing" },
-    { name: "For Sellers", to: "/sign-up" }, // replaced with SignUpButton
-    { name: "Login", to: "/sign-in" }        // replaced with SignInButton
+    { name: "For Sellers", to: "/sign-up" },
+    { name: "Login", to: "/sign-in" }        
   ]
   useEffect(() => {
 
@@ -21,7 +21,6 @@ const Navbar = () => {
       navigate("/dashboard")
     }
   }, [isSignedIn, navigate])
-
   return (
 
     <div className="w-full h-[8vh] shadow-md fixed z-50">
