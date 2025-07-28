@@ -5,9 +5,10 @@ import { RequireAuthProp, clerkClient } from "@clerk/clerk-sdk-node";
 
 type ClerkRequest = RequireAuthProp<Request>
 
-export const userAuth = async(req:ClerkRequest, res:Response)=>{
+export const clerkUserAuth = async(req:ClerkRequest, res:Response)=>{
   const {userId} = req.auth;
   console.log("Clerk userId:", userId);
+  console.log(req.auth)
 
   let user = await  User.findOne({clerkId:userId})
 
