@@ -3,7 +3,7 @@ import { PiSquaresFourBold } from "react-icons/pi";
 import { FaRegCaretSquareUp } from "react-icons/fa";
 import { RiSettings4Fill } from "react-icons/ri";
 import { LuClipboardList } from "react-icons/lu";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { FaCaretDown } from "react-icons/fa";
 import { useState } from "react";
@@ -59,7 +59,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <div className="relative">
-                    <button className="flex items-center gap-3 hover:bg-zinc-100 p-2 rounded-md" onClick={()=>setShowDropdown((prev) => !prev)}>
+                    <button className="flex items-center gap-3 hover:bg-slate-200 p-2 rounded-md" onClick={()=>setShowDropdown((prev) => !prev)}>
                         <img
                             src={currentUser?.profilePicture || '/default-avatar.png'}
                             alt=""
@@ -81,11 +81,11 @@ const Sidebar = () => {
                                 ${showDropdown ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}
                               `}
                           >
-                        <ul className="text-sm text-zinc-700">
-                            <li className="px-4 py-2 hover:bg-zinc-100 cursor-pointer">View Profile</li>
-                            <li className="px-4 py-2 hover:bg-zinc-100 cursor-pointer">Settings</li>
+                        <div className="text-sm text-zinc-700  flex flex-col">
+                            <Link to="/profile" className=" w-full text-left px-4 py-2 hover:bg-zinc-100 cursor-pointer">View Profile</Link>
+                            <Link to="/profile" className="px-4 py-2 hover:bg-zinc-100 cursor-pointer">Settings</Link>
                             <button onClick={()=> setIsOpen(true)} className="w-full text-left px-4 py-2 hover:bg-zinc-100 cursor-pointer text-red-500">Logout</button>
-                        </ul>
+                        </div>
                         <LogOutModal
                         isOpen={isOpen}
                         onClose={()=> setIsOpen(false)}
