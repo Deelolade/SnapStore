@@ -1,15 +1,17 @@
-import MainDashboard from "@/components/MainDashboard"
+import React from 'react'
 import Sidebar from "@/components/Sidebar"
+import AllProducts from '@/components/AllProducts'
 
-const Dashboard = () => {
+
+const Products = () => {
   return (
     <div>
       <section className="max-w-7xl  mx-auto h-screen flex  justify-between items-center gap-5">
-        <Sidebar />
-        <MainDashboard />
+      <Sidebar/>
+      <AllProducts/>
       </section>
     </div>
   )
 }
 
-export default Dashboard
+export default Products

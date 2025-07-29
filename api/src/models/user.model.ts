@@ -1,23 +1,54 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+// Define the structure of social media links
+interface SocialLink {
+  platform: "whatsapp" | "instagram" | "facebook" | "twitter" | "linkedin";
+  url: string;
+}
+
+// 1. Define the interface for a User document
+export interface UserDocument extends Document {
+  clerkId: string;
+  name: string;
+  email: string;
+  profilePicture: string;
+  socialMedia: SocialLink[];
+}
+
+const userSchema = new Schema<UserDocument>(
+  {
     clerkId: {
-        type: String,
-        required: true,
-        unique: true, // Important for linking Clerk user
-      },
-    name:{
-        type:String,
+      type: String,
+      required: true,
+      unique: true,
     },
-    email:{
-        type:String,
-        required: true,
+    name: {
+      type: String,
     },
-    profilePicture:{
-        type: String,
-        default: "https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png"
+    email: {
+      type: String,
+      required: true,
     },
-},{timestamps:true}
-)
-export const User = mongoose.model("User", userSchema);
+    profilePicture: {
+      type: String,
+      default:
+        "https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png",
+    },
+    socialMedia: {
+      type: [
+        {
+          platform: {
+            type: String,
+            enum: ["whatsapp", "instagram", "facebook", "twitter", "linkedin"],
+            required: true,
+          },
+          url: { type: String, required: true },
+        },
+      ],
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
 
+export const User = mongoose.model<UserDocument>("User", userSchema);
