@@ -6,6 +6,7 @@ import { connectDB } from "./config/db";
 import cors from "cors"
 import dotenv from 'dotenv';
 import { FRONTEND_URL, CLERK_SECRET_KEY } from "./config/env";
+import { storeRouter } from "./routes/store.route";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get("/", (req, res)=>{
 })
 app.use("/api/user", userRouter)
 app.use("/api/product", productRouter)
+app.use("/api/store", storeRouter)
 
 app.listen(PORT, ()=>{
     console.log(`app is running on http://localhost:${PORT}`)

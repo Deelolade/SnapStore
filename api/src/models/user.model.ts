@@ -12,6 +12,7 @@ export interface UserDocument extends Document {
   name: string;
   email: string;
   profilePicture: string;
+  storeSlug: string;
   socialMedia: SocialLink[];
 }
 
@@ -34,6 +35,11 @@ const userSchema = new Schema<UserDocument>(
       default:
         "https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png",
     },
+    storeSlug: {
+      type: String,
+      unique: true,
+      required: true
+    },
     socialMedia: {
       type: [
         {
@@ -47,6 +53,7 @@ const userSchema = new Schema<UserDocument>(
       ],
       default: [],
     },
+    
   },
   { timestamps: true }
 );

@@ -25,3 +25,4 @@ export const clerkUserAuth = async(req:ClerkRequest, res:Response)=>{
   res.status(200).json({message: "User synced successfully", user})
   console.log(user)
 } 
+
