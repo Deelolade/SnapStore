@@ -1,28 +1,26 @@
-import jwt from "jsonwebtoken"
-import {  Request ,Response, NextFunction } from "express";
-import { UserDocument, User } from "../models/user.model";
-import { JWT_SECRET } from "../config/env";
-
+import { Request, Response, NextFunction } from "express";
+import { verifyToken } from "@clerk/backend";
 
 export interface AuthenticatedRequest extends Request {
-    user?: UserDocument; 
+  user?: string;
+}
+
+export const authenticate = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token provided" });
   }
 
-export const authenticate = async (req:AuthenticatedRequest, res:Response, next: NextFunction)=>{
+  const token = authHeader.split(" ")[1];
+  console.log("Backend received token:", token);
 
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if(!token) return res.status(401).json({message:" Access denied: invalid or expired token."});
-
-    try {
-            const decoded : any = jwt.verify(token, JWT_SECRET);
-            const user = await User.findById(decoded.id);
-            if(!user){
-               return  res.status(401).json({message:" User not found !"})
-            }
-                req.user = user;
-                next()
-    } catch (error) {
-        res.status(401).json({message: 'Invalid token'})
-    }
-}
+  try {
+    const session = await verifyToken(token, { secretKey: process.env.CLERK_SECRET_KEY });
+    req.user = session.sub;
+    next();
+  } catch (error) {
+    console.error("Token verification failed", error);
+    res.status(401).json({ message: "Invalid token" });
+  }
+};

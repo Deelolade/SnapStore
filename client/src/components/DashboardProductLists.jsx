@@ -24,7 +24,7 @@ const DashboardProductLists = () => {
                 <p className='text-center font-semibold text-lg'>Clicks</p>
                 <p className='text-center font-semibold text-lg'>Action</p>
             </div>
-            <div className='overflow-y-auto max-h-[360px] p-3 bg-white rounded-lg '>
+            <div className='overflow-y-auto max-h-[360px] p-3 bg-white rounded-lg scrollbar-hide '>
 
                 {
                     packages.map((pkg, idx) => {

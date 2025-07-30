@@ -18,7 +18,7 @@ app.use(cors({
 const PORT = 3000 
 connectDB()
 app.use(express.json());
-app.use(ClerkExpressWithAuth({CLERK_SECRET_KEY}));
+app.use(ClerkExpressWithAuth({ secretKey: CLERK_SECRET_KEY }));
 
 app.get("/", (req, res)=>{
     res.json("hello world !!")
