@@ -3,9 +3,7 @@ import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
 import cloudinary, { uploadImages } from "../utils/cloudinary";
-import multer from "multer";
-import streamifier from "streamifier";
-// import { v2 as cloudinary } from "cloudinary";
+
 
 export const getProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

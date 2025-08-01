@@ -142,55 +142,24 @@ const Profile = () => {
         throw new Error('Authentication token not available')
       }
 
-      // Check if there's a new image to upload
-    //   const hasNewImage = data.profilePicture && data.profilePicture instanceof File
-      
-    //   if (hasNewImage) {
-    //     // Upload with image
-    //     const formData = new FormData()
-    //     formData.append('profilePicture', data.profilePicture)
-    //     formData.append('name', data.name)
-    //     formData.append('email', data.email)
-    //     formData.append('storeSlug', data.storeSlug)
-    //     formData.append('socialMedia', JSON.stringify(data.socialMedia))
+  
 
-    //     const response = await axios.put(
-    //       `${import.meta.env.VITE_API_BASE_URL}/user/profile-with-image`,
-    //       formData,
-    //       {
-    //         headers: {
-    //           'Authorization': `Bearer ${token}`,
-    //           'Content-Type': 'multipart/form-data'
-    //         }
-    //       }
-    //     )
-        
-    //     console.log('Profile with image update response:', response.data)
-        
-    //     // Update Redux store with new user data
-    //     dispatch(signInSuccess(response.data.user))
-        
-    //     setSuccess('Profile updated successfully with new image!')
-    //     setIsEditing(false)
-        
-    //     // Clear success message after 3 seconds
-    //     setTimeout(() => setSuccess(null), 3000)
-    //   } else {
-        // Update without image
-        const updateData = {
-          name: data.name,
-          email: data.email,
-          storeSlug: data.storeSlug,
-          socialMedia: data.socialMedia
-        }
+        const formData = new FormData()
+        formData.append('profilePicture', data.profilePicture)
+        console.log('profilePicture', data.profilePicture)
+        formData.append('name', data.name)
+        formData.append('email', data.email)
+        formData.append('storeSlug', data.storeSlug)
+        formData.append('socialMedia', JSON.stringify(data.socialMedia))
+        console.log('socialMedia', data.socialMedia)
+        console.log('socialMedia stringify', JSON.stringify(data.socialMedia))
 
         const response = await axios.put(
           `${import.meta.env.VITE_API_BASE_URL}/user/profile`,
-          updateData,
+          formData,
           {
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
             }
           }
         )
@@ -407,7 +376,7 @@ const Profile = () => {
                 )}
               </div>
 
-              {watchedSocialMedia.length === 0 ? (
+              {(!watchedSocialMedia || watchedSocialMedia.length === 0) ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Plus className="w-8 h-8 text-gray-400" />
