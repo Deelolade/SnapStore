@@ -5,12 +5,14 @@ import { productRouter } from "./routes/product.route"
 import { connectDB } from "./config/db";
 import cors from "cors"
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser"
 import { FRONTEND_URL, CLERK_SECRET_KEY } from "./config/env";
 import { storeRouter } from "./routes/store.route";
 
 dotenv.config();
 
 const app= express();
+app.use(cookieParser())
 app.use(cors({
     origin: FRONTEND_URL, 
     credentials: true,  

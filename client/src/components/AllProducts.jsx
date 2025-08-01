@@ -16,28 +16,37 @@ const AllProducts = () => {
     const getMyProducts = async () => {
       try {
         const token = await getToken();
-        console.log("Frontend token:", token);
-
         const res = await axios.get(`${API_URL}/product/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        console.log(res.data.products)
         setProducts(res.data.products)
         localStorage.setItem("my_products", JSON.stringify(res.data.products))
       } catch (error) {
         console.log("Frontend error:", error.response?.data || error.message);
-        const cachedData = localStorage.getItem("my_proucts")
+        const cachedData = localStorage.getItem("my_products")
         if(cachedData){
           setProducts(JSON.parse(cachedData))
         }
       }
     }
     getMyProducts();
-  }, [])
-
+  }, [products])
+  
+  const deleteProduct =async(id)=>{
+    console.log(id)
+    try {
+      const token = await getToken();
+     await axios.delete(`${API_URL}/product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.log("Frontend error:", error.response?.data || error.message);
+    }
+  }
   return (
     <>
       <main className=" w-[85%] px-8 h-screen py-10 max-h-screen overflow-y-auto scrollbar-hide">
@@ -88,6 +97,9 @@ const AllProducts = () => {
                       
                       <div className="text-center">
                         <button className='w-full px-6 py-3 shadow-lg bg-green hover:bg-green/90 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105'>
+                          View Details
+                        </button>
+                        <button onClick={()=>deleteProduct(pkg._id)} className='w-full mt-4 px-6 py-3 shadow-lg bg-red hover:bg-green/90 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105'>
                           View Details
                         </button>
                       </div>

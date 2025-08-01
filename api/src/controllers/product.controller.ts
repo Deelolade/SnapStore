@@ -2,44 +2,102 @@ import { Request, Response, NextFunction } from "express";
 import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
+import cloudinary, { uploadImages } from "../utils/cloudinary";
+import multer from "multer";
+import streamifier from "streamifier";
+// import { v2 as cloudinary } from "cloudinary";
 
 export const getProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-
-}
-
-export const createProduct = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-
-
     try {
-        // const sellerId = req.user?._id;
-        // if (!sellerId){
-        //     return res.status(401).json({message:"Unauthorized !. Seller not found"})
-        // }
-        const { title, price, description, image, sellerId } = req.body
-
-        const newProduct = new Product({
-            title, price, description, image, sellerId
-        })
-        await newProduct.save();
-        res.status(200).json({ message: "product created succesfully", newProduct })
-        console.log(newProduct)
+        const products = await Product.find({});
+        res.status(200).json({
+            success: true,
+            products
+        });
     } catch (error) {
-        return next(error)
+        next(error);
     }
-
 }
+
+
+export const deleteProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    console.log("new item",req.params)
+    const {  id:productId } = req.params;
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+
+        if (!deletedProduct) {
+            return res.status(404).json({
+              success: false,
+              message: "Product not found",
+            });
+          }
+      
+        res.status(200).json({
+            success: true,
+            message: "Item deleted successfully"
+        });
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        next(error);
+    }
+}
+
+export const createProduct = async (req: AuthenticatedRequest, res: Response, next: NextFunction) =>{
+    console.log("BODY:", req.body);       // should now have title, description, etc.
+  console.log("FILES:", req.files); 
+//   const sellerId = req.user; 
+    try {
+        const user = await User.findOne({ clerkId: req.user });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+        const { title, description, price, category,} = req.body;
+    
+        if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
+          return res.status(400).json({ error: "No images uploaded" });
+        }
+    
+        const imageUrls = await uploadImages(req.files as Express.Multer.File[]);
+    
+        // Create and save product
+        const newProduct = await Product.create({
+          title,
+          description,
+          price,
+          category,
+          sellerId :user._id,
+          image:imageUrls 
+        });
+    
+        res.status(201).json(newProduct);
+      } catch (error) {
+        console.error("Error creating product:", error);
+        res.status(500).json({ error: "Server error creating product" });
+      }
+}
+
+
 
 export const getMyProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const clerkUserId = req.user; // This is the Clerk user ID
-        console.log("Clerk user ID:", clerkUserId);
         
-        if (!clerkUserId) return res.status(401).json({ message: "Unauthorized !. Seller not found" })
+        if (!clerkUserId) {
+            res.status(401).json({ message: "Unauthorized !. Seller not found" });
+            return;
+        }
         
         // Find the user in your database using the Clerk ID
         const user = await User.findOne({ clerkId: clerkUserId });
         if (!user) {
-            return res.status(404).json({ message: "User not found in database" });
+            res.status(404).json({ message: "User not found in database" });
+            return;
         }
         
         // Use the database user ID for the product query
@@ -47,9 +105,8 @@ export const getMyProducts = async (req: AuthenticatedRequest, res: Response, ne
         res.status(200).json({
             success: true,
             products
-        })
+        });
     } catch (error) {
         next(error)
     }
-
 }

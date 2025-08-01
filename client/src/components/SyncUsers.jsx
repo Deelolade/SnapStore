@@ -15,39 +15,51 @@ const SyncUsers = () => {
             if (!authLoaded || !userLoaded || !isSignedIn || !user || hasSynced) return
 
             try {
-            const token = await getToken();
-            
+                const token = await getToken();
+                
+                // Validate token
+                if (!token) {
+                    console.error("No token available");
+                    dispatch(signInError("Authentication token not available"));
+                    return;
+                }
+
+                console.log("Token received:", token.substring(0, 20) + "...");
+                
                 const userId = user.id;
                 const fullName = user.fullName;
                 const email = user.primaryEmailAddress?.emailAddress;
                 const imageUrl = user.imageUrl;
                 
-                console.log(userId)
-                dispatch(signInStart())
-                    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/sync`, {
-                        userId,
-                        email,
-                        fullName,
-                        imageUrl
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                        withCredentials: true,
-                    })
-                    dispatch(signInSuccess(response.data.user))
-                    console.log("User synced:",response.data.user)
-                    setHasSynced(true);
-                } catch (err) {
-                    console.error("User sync failed:", err);
-                    dispatch(signInError(err.message))
-
-                }
+                console.log("User ID:", userId);
+                dispatch(signInStart());
+                
+                const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/sync`, {
+                    userId,
+                    email,
+                    fullName,
+                    imageUrl
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true,
+                });
+                
+                dispatch(signInSuccess(response.data.user));
+                console.log("User synced:", response.data.user);
+                setHasSynced(true);
+            } catch (err) {
+                console.error("User sync failed:", err);
+                const errorMessage = err.response?.data?.message || err.message || "Failed to sync user";
+                dispatch(signInError(errorMessage));
             }
-        syncUser()
-    }, [authLoaded, userLoaded, user, isSignedIn, hasSynced]
-    )
-    return null
+        }
+        syncUser();
+    }, [authLoaded, userLoaded, user, isSignedIn, hasSynced, getToken, dispatch]);
+
+    return null;
 }
 
 export default SyncUsers
