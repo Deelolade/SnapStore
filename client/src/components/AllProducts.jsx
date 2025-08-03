@@ -4,6 +4,7 @@ import imageTwo from "@/images/shoe.jpg"
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import ProductModal from './ProductModal';
 
 
 
@@ -11,6 +12,7 @@ import { useAuth } from "@clerk/clerk-react";
 const AllProducts = () => {
   const { getToken } = useAuth();
   const [products, setProducts] = useState([])
+  const [isOpen, setIsOpen] = useState(false)
   const API_URL = import.meta.env.VITE_API_BASE_URL
   useEffect(() => {
     const getMyProducts = async () => {
@@ -32,7 +34,7 @@ const AllProducts = () => {
       }
     }
     getMyProducts();
-  }, [products])
+  }, [])
   
   const deleteProduct =async(id)=>{
     console.log(id)
@@ -96,9 +98,13 @@ const AllProducts = () => {
                       </div>
                       
                       <div className="text-center">
-                        <button className='w-full px-6 py-3 shadow-lg bg-green hover:bg-green/90 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105'>
+                        <button onClick={()=> setIsOpen(true)} className='w-full px-6 py-3 shadow-lg bg-green hover:bg-green/90 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105'>
                           View Details
                         </button>
+                        <ProductModal
+                        isOpen={isOpen}
+                        onClose={()=> setIsOpen(false)}
+                        />
                         <button onClick={()=>deleteProduct(pkg._id)} className='w-full mt-4 px-6 py-3 shadow-lg bg-red hover:bg-green/90 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105'>
                           View Details
                         </button>

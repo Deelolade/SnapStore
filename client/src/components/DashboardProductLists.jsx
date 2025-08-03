@@ -30,8 +30,8 @@ const DashboardProductLists = () => {
                     packages.map((pkg, idx) => {
 
                         return (
-                            <div className='overflow-y-auto max-h-96'>
-                                <div className="grid grid-cols-5 gap-3  p-3 items-center bg-white border-t hover:bg-gray-100 overflow-y-auto transition-colors" key={idx}>
+                            <div className='overflow-y-auto max-h-96' key={idx}>
+                                <div className="grid grid-cols-5 gap-3  p-3 items-center bg-white border-t hover:bg-gray-100 overflow-y-auto transition-colors">
                                     <img src={pkg.image} alt="" />
                                     <p className='text-center'>{pkg.name}</p>
                                     <p className='text-center'>{pkg.views}</p>

@@ -12,7 +12,7 @@ import { signInSuccess } from '../redux/user/userSlice'
 const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
   email: yup.string().email('Invalid email format').required('Email is required'),
-  profilePicture: yup.mixed().required('Profile picture is required'),
+  profilePicture: yup.mixed(),
   storeSlug: yup.string().required('Store address is required').min(3, 'Store address must be at least 3 characters'),
   socialMedia: yup.array().of(
     yup.object({
@@ -32,9 +32,9 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const fileInputRef = useRef(null)
-  
+
   console.log('Current user:', currentUser)
-  
+console.log("currentUser?.profilePicture", currentUser?.profilePicture)
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ const Profile = () => {
     defaultValues: {
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      profilePicture: null,
+      profilePicture: currentUser?.profilePicture ,
       storeSlug: currentUser?.storeSlug || '',
       socialMedia: currentUser?.socialMedia || []
     }
@@ -62,7 +62,7 @@ const Profile = () => {
       reset({
         name: currentUser.name || '',
         email: currentUser.email || '',
-        profilePicture: null,
+        profilePicture: currentUser?.profilePicture || '',
         storeSlug: currentUser.storeSlug || '',
         socialMedia: currentUser.socialMedia || []
       })
@@ -79,7 +79,7 @@ const Profile = () => {
         alert('Please select an image file')
         return
       }
-      
+
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size should be less than 5MB')
@@ -92,7 +92,7 @@ const Profile = () => {
         setImagePreview(e.target.result)
       }
       reader.readAsDataURL(file)
-      
+
       // Set form value
       setValue('profilePicture', file)
     }
@@ -107,7 +107,7 @@ const Profile = () => {
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .trim('-')
-      
+
       if (slug && slug !== watch('storeSlug')) {
         setValue('storeSlug', slug)
       }
@@ -132,55 +132,48 @@ const Profile = () => {
     setIsLoading(true)
     setError(null)
     setSuccess(null)
-    
+
     try {
       console.log('Profile data to update:', data)
-      
+
       // Get authentication token
       const token = await getToken()
       if (!token) {
         throw new Error('Authentication token not available')
       }
+      const formData = new FormData()
+      formData.append('profilePicture', data.profilePicture)
+      formData.append('name', data.name)
+      formData.append('email', data.email)
+      formData.append('storeSlug', data.storeSlug)
+      formData.append('socialMedia', JSON.stringify(data.socialMedia))
 
-  
-
-        const formData = new FormData()
-        formData.append('profilePicture', data.profilePicture)
-        console.log('profilePicture', data.profilePicture)
-        formData.append('name', data.name)
-        formData.append('email', data.email)
-        formData.append('storeSlug', data.storeSlug)
-        formData.append('socialMedia', JSON.stringify(data.socialMedia))
-        console.log('socialMedia', data.socialMedia)
-        console.log('socialMedia stringify', JSON.stringify(data.socialMedia))
-
-        const response = await axios.put(
-          `${import.meta.env.VITE_API_BASE_URL}/user/profile`,
-          formData,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            }
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_BASE_URL}/user/profile`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
           }
-        )
+        }
+      )
 
-        console.log('Profile update response:', response.data)
-        
-        // Update Redux store with new user data
-        dispatch(signInSuccess(response.data.user))
-        
-        setSuccess('Profile updated successfully!')
-        setIsEditing(false)
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => setSuccess(null), 3000)
-    //   }
-      
+      console.log('Profile update response:', response.data)
+
+      // Update Redux store with new user data
+      dispatch(signInSuccess(response.data.user))
+      setSuccess('Profile updated successfully!')
+      setIsEditing(false)
+
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(null), 3000)
+      //   }
+
     } catch (error) {
       console.error('Error updating profile:', error)
       const errorMessage = error.response?.data?.message || error.message || 'Failed to update profile'
       setError(errorMessage)
-      
+
       // Clear error message after 5 seconds
       setTimeout(() => setError(null), 5000)
     } finally {
@@ -188,8 +181,8 @@ const Profile = () => {
     }
   }
 
-    return (
-        <>
+  return (
+    <>
       <main className="w-[85%] px-8 h-screen py-10 overflow-y-auto bg-gray-50">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -212,7 +205,7 @@ const Profile = () => {
               <p className="text-green-800 font-medium">{success}</p>
             </div>
           )}
-          
+
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
               <p className="text-red-800 font-medium">{error}</p>
@@ -459,9 +452,9 @@ const Profile = () => {
             )}
           </form>
         </div>
-            </main>
-        </>
-    )
+      </main>
+    </>
+  )
 }
 
 export default Profile
