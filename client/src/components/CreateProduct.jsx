@@ -6,6 +6,8 @@ import { useAuth } from '@clerk/clerk-react'
 import axios from 'axios'
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -28,6 +30,8 @@ const CreateProduct = () => {
   // console.log(currentUser)
   // const [imageFile, setImageFile] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+  const navigate = useNavigate()
+  const [imageDisplayFiles, setImageDisplayFiles] = useState([]);
   const [uploadStatus, setUploadStatus] = useState("")
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const API_URL = import.meta.env.VITE_API_BASE_URL
@@ -47,15 +51,20 @@ const CreateProduct = () => {
       setImageFiles(files); // <-- this should be state that holds an array
     }
     console.log("Selected files:", files);
+    const filePreviews = files.map(file => ({
+      url: URL.createObjectURL(file),
+      name: file.name
+    }));
+    setImageDisplayFiles(filePreviews);
+    console.log(filePreviews)
   };
-  
   const onSubmit = async (data) => {
     try {
       const token = await getToken();
   
       const formData = new FormData();
       formData.append("title", data.title);
-      // formData.append("sellerId",currentUser._id )
+     
       formData.append("description", data.description);
       formData.append("price", data.price);
       formData.append("category", data.category);
@@ -67,7 +76,6 @@ const CreateProduct = () => {
       imageFiles.forEach((image) => {
         formData.append("images", image);
       });
-      console.log(formData)
       const res = await axios.post(`${API_URL}/product/images`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,12 +86,13 @@ const CreateProduct = () => {
       console.log("Product created:", res.data);
     } catch (err) {
       console.error("Create product error:", err.response?.data || err.message);
+    } finally{
+      toast.success("Package  created successfully!");
+      setTimeout(()=>{
+        navigate("/products")
+      }, 2000)
     }
   };
-
-  
- 
-
   return (
     <>
       <main className=" w-[85%] px-8 h-screen py-10 max-h-screen overflow-y-auto ">
@@ -189,6 +198,14 @@ const CreateProduct = () => {
             {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>}
             <p className="text-sm text-gray-500 mt-2">You can upload multiple images. First image will be the main product image.</p>
           </div>
+          <div className="flex gap-2 mt-4">
+        {imageDisplayFiles.map((image, idx) => (
+          <div key={idx} className="w-20 h-20 border rounded overflow-hidden flex flex-col items-center">
+            <img src={image.url} alt={image.name} className="w-full h-full object-cover" />
+            <p className="text-xs truncate">{image.name}</p>
+          </div>
+        ))}
+      </div>
           <button
             type="submit"
             className="mt-4 bg-blue hover:bg-blue/90 text-white font-semibold py-3 rounded-lg transition-colors"

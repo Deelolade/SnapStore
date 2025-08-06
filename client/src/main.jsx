@@ -7,7 +7,8 @@ import { store, persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 // The error occurs if the environment variable VITE_CLERK_PUBLISHABLE_KEY is not defined or not loaded correctly.
@@ -28,5 +29,16 @@ createRoot(document.getElementById('root')).render(
         </Router>
       </ClerkProvider>
     </Provider>
+    <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
   </PersistGate>
 )
