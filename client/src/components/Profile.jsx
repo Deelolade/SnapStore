@@ -186,7 +186,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
       <main className="w-[85%] px-8 h-screen py-10 overflow-y-auto bg-gray-50">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className='text-4xl font-bold text-gray-900'>Profile Settings</h1>
               <p className="text-gray-600 mt-2">Manage your account information and preferences</p>

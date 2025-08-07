@@ -5,9 +5,11 @@ import { User } from "../models/user.model";
 import cloudinary, { uploadImages } from "../utils/cloudinary";
 
 
-export const getProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const products = await Product.find({});
+      const {slug, sellerId} = req.params;
+        const products = await Product.find({sellerId});
+        
         res.status(200).json({
             success: true,
             products

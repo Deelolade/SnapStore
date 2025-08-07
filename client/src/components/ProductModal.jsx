@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-// import { X } from 'lucide-react';
+import { Button, Dialog, DialogPanel,  } from '@headlessui/react'
 import { toast } from 'react-toastify';
 import { X, Trash2 } from 'lucide-react';
 
@@ -95,7 +94,6 @@ const ProductModal = ({ isOpen, onClose, package: product, deleteProduct }) => {
                     </div>
                 </div>
             </Dialog>
-
         </>
     )
 }

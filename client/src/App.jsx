@@ -7,6 +7,7 @@ import Products from "./pages/Products";
 import ProfilePage from "./pages/ProfilePage";
 import AddProduct from "./pages/AddProduct";
 import SettingsPage from "./pages/SettingsPage";
+import Store from "./pages/Store";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/add-products" element={<AddProduct />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/store/:slugName" element={<Store />} />
       
     </Routes>
   )
