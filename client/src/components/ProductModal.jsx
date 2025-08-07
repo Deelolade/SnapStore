@@ -4,15 +4,15 @@ import { toast } from 'react-toastify';
 import { X, Trash2 } from 'lucide-react';
 
 const ProductModal = ({ isOpen, onClose, package: product, deleteProduct }) => {
-    console.log("products:", product)
     const imageUrls = product.image
     const [selectedImage, setSelectedImage] = useState(imageUrls[0]);
-    console.log(imageUrls)
     const handleDelete = () => {
         deleteProduct(product._id); // or product.id, depending on your schema
         onClose(); // Optionally close the modal after deleting
         toast.success("Package deleted successfully!");
       };
+
+      
     
     return (
         <>
@@ -70,6 +70,8 @@ const ProductModal = ({ isOpen, onClose, package: product, deleteProduct }) => {
           <p className="text-gray-800 font-mono text-lg mt-1">{product.slug}</p>
         </div>
       </div>
+
+      
 
       {/* Action Buttons */}
       <div className="mt-auto flex gap-4">
