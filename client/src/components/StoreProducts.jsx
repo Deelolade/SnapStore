@@ -1,8 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import ProductModal from './ProductModal';
 import SellerProductModal from './SellerProductModal';
+import { Package } from "lucide-react"
 
 
 const StoreProducts = () => {
@@ -12,18 +12,29 @@ const StoreProducts = () => {
     const API_URL = import.meta.env.VITE_API_BASE_URL;
     const [selectedProduct, setSelectedProduct] = useState(null);
 
-    console.log(slugName)
-
-
     const fetchData = async () => {
         try {
             const res = await axios.get(`${API_URL}/store/${slugName}`)
-            setProducts(res.data.products)
-            setSellerDetails(res.data.seller)
-            console.log(res.data.seller)
-            console.log(res.data)
+            const dataToCache = {
+                products :res.data.products,
+                seller: res.data.seller,
+                cachedAt: Date.now()
+            }
+            localStorage.setItem("store_data", JSON.stringify(dataToCache))
+            setProducts(dataToCache.products)
+            setSellerDetails(dataToCache.seller)
         } catch (error) {
-            console.log(error)
+            const cachedData = localStorage.getItem("store_data");
+            if(cachedData){
+                const { products, seller, cachedAt } = JSON.parse(cachedData);
+                const isStale = Date.now() - cachedAt > 5 * 60   * 1000;
+                if(!isStale){
+                    setProducts(products)
+                    setSellerDetails(seller)
+                    return;
+                }
+            }
+            console.log("Frontend error:", error.response?.data || error.message);
         }
     }
     useEffect(() => {
@@ -33,7 +44,7 @@ const StoreProducts = () => {
         <>
             <section className=' py-5 px-5 max-w-7xl mx-auto bg-wh ite h-screen'>
                 <div className="flex justify-between items-center mb-8">
-                    <h1 className='text-3xl font-semibold text-gray-900'>Welcome to <span>{sellerDetails.name}'s</span> Store </h1>
+                    <h1 className='text-3xl font-semibold text-gray-900'>Welcome to <span>{sellerDetails.name }'s</span> Store </h1>
                     <img src={sellerDetails.profilePicture} className='rounded-full h-12 w-12' alt="" />
                 </div>
                 <div className="mt-12">
@@ -56,7 +67,7 @@ const StoreProducts = () => {
                                             </div>
                                         ) : (
                                             <div className="w-full h-44 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center">
-                                                {/* <Package className="text-gray-400 mb-2" size={32} /> */}
+                                                <Package className="text-gray-400 mb-2" size={32} />
                                                 <span className="text-gray-400 text-sm font-medium">No Image</span>
                                             </div>
                                         )}

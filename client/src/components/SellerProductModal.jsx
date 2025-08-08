@@ -71,15 +71,6 @@ const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }
                     <Share2 size={16} />
                     Share
                   </button>
-                  {deleteProduct && (
-                    <button
-                      onClick={handleDelete}
-                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 bg-red-50 text-red-700 hover:bg-red-100 transition"
-                    >
-                      <Trash2 size={16} />
-                      Delete
-                    </button>
-                  )}
                   <button
                     onClick={onClose}
                     className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
@@ -142,6 +133,7 @@ const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }
                       Close
                     </button>
                     <button
+                    
                       className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-5 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
                     >
                       Send Message
