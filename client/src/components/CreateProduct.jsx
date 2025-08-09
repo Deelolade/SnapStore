@@ -28,7 +28,7 @@ const schema = yup.object({
 })
 
 const CreateProduct = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState(null);
+  const [selectedPlatform, setSelectedPlatform] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const navigate = useNavigate()
   const [imageDisplayFiles, setImageDisplayFiles] = useState([]);
@@ -64,7 +64,6 @@ const CreateProduct = () => {
 
       const formData = new FormData();
       formData.append("title", data.title);
-
       formData.append("description", data.description);
       formData.append("price", data.price);
       formData.append("category", data.category);
@@ -91,10 +90,10 @@ const CreateProduct = () => {
       }, 2000)
     } catch (err) {
       toast.error(getErrorMessage(err));
-      console.log(err.response?.data)
       console.error("Create product error:", err.response?.data || err.message);
     } 
   };
+  console.log(selectedPlatform)
   return (
     <>
       <main className=" w-[85%] px-8 h-screen py-10 max-h-screen overflow-y-auto ">
@@ -175,6 +174,7 @@ const CreateProduct = () => {
   <select
     {...register("socialMedia")}
     id="socialMedia"
+    onChange={(e)=> setSelectedPlatform( e.target.value)} 
     className={`w-full border rounded-lg px-4 py-2 focus:outline-blue ${
       errors.socialMedia ? 'border-red-500' : 'border-gray-300'
     }`}

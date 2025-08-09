@@ -42,6 +42,9 @@ const productSchema = new mongoose.Schema({
     },
     socialMedia: {
         type: [String], // array of platform names like ["whatsapp", "instagram"]
+        set: (data :string | string[]) =>{
+            return Array.isArray(data) ? data: [data]
+        }
       }
 },{timestamps: true});
 

@@ -57,7 +57,7 @@ export const createProduct = async (req: AuthenticatedRequest, res: Response, ne
         const user = await User.findOne({ clerkId: req.user });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-        const { title, description, price, category,} = req.body;
+        const { title, description, price, category, socialMedia} = req.body;
     
         if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
           return res.status(400).json({ error: "No images uploaded" });
@@ -72,7 +72,8 @@ export const createProduct = async (req: AuthenticatedRequest, res: Response, ne
           price,
           category,
           sellerId :user._id,
-          image:imageUrls 
+          image:imageUrls,
+          socialMedia 
         });
     
         res.status(201).json(newProduct);
