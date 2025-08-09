@@ -17,7 +17,6 @@ const productSchema = new mongoose.Schema({
     },
     category:{
         type:String,
-        // required:true
     },
     price:{
         type: Number,
@@ -28,7 +27,6 @@ const productSchema = new mongoose.Schema({
     },
     image:{
         type: [String],
-        // required:true
     },
     views: { 
         type: Number, 
@@ -41,8 +39,10 @@ const productSchema = new mongoose.Schema({
     slug: { 
         type: String, 
         unique: true,
-        // required:true
-    }
+    },
+    socialMedia: {
+        type: [String], // array of platform names like ["whatsapp", "instagram"]
+      }
 },{timestamps: true});
 
 productSchema.pre("save", function (next) {
