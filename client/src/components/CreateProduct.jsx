@@ -5,7 +5,6 @@ import * as yup from 'yup'
 import { useAuth } from '@clerk/clerk-react'
 import axios from 'axios'
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom'
 import { getErrorMessage } from '@/helpers/helpers'
@@ -16,7 +15,6 @@ const schema = yup.object({
   title: yup.string().required('Title is required').min(3, 'Title must be at least 3 characters'),
   description: yup.string().optional(),
   category: yup.string().optional(),
-  socialMedia: yup.string().required('Please select a social media platform'),
   price: yup.number().required('Price is required').positive('Price must be positive').typeError('Price must be a number'),
   discountedPrice: yup.number().optional().positive('Discounted price must be positive').typeError('Discounted price must be a number'),
   image: yup.mixed().optional()
@@ -28,12 +26,9 @@ const schema = yup.object({
 })
 
 const CreateProduct = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const navigate = useNavigate()
   const [imageDisplayFiles, setImageDisplayFiles] = useState([]);
-  const [uploadStatus, setUploadStatus] = useState("")
-  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const API_URL = import.meta.env.VITE_API_BASE_URL
   const { getToken } = useAuth();
   const {
@@ -67,7 +62,6 @@ const CreateProduct = () => {
       formData.append("description", data.description);
       formData.append("price", data.price);
       formData.append("category", data.category);
-      formData.append("socialMedia", data.socialMedia);
 
       // append images (array of File)
       for (let [key, value] of formData.entries()) {
@@ -85,15 +79,15 @@ const CreateProduct = () => {
 
       console.log("Product created:", res.data);
       toast.success("Package  created successfully!");
+      reset()
       setTimeout(() => {
         navigate("/products")
       }, 2000)
     } catch (err) {
       toast.error(getErrorMessage(err));
       console.error("Create product error:", err.response?.data || err.message);
-    } 
+    }
   };
-  console.log(selectedPlatform)
   return (
     <>
       <main className=" w-[85%] px-8 h-screen py-10 max-h-screen overflow-y-auto ">
@@ -166,30 +160,6 @@ const CreateProduct = () => {
                 {errors.discountedPrice && <p className="text-red-500 text-sm mt-1">{errors.discountedPrice.message}</p>}
               </div>
             </div>
-
-            <div>
-  <label htmlFor="socialMedia" className="block text-lg font-medium mb-2">
-    Choose Social Media <span className="text-red-500">*</span>
-  </label>
-  <select
-    {...register("socialMedia")}
-    id="socialMedia"
-    onChange={(e)=> setSelectedPlatform( e.target.value)} 
-    className={`w-full border rounded-lg px-4 py-2 focus:outline-blue ${
-      errors.socialMedia ? 'border-red-500' : 'border-gray-300'
-    }`}
-    defaultValue=""
-  >
-    <option value="" disabled>Select a platform to be reached</option>
-    <option value="whatsapp">WhatsApp</option>
-    <option value="twitter">Twitter</option>
-    <option value="linkedin">LinkedIn</option>
-  </select>
-  {errors.socialMedia && (
-    <p className="text-red-500 text-sm mt-1">{errors.socialMedia.message}</p>
-  )}
-</div>
-
             <div className=''>
               <label className="block text-lg font-medium mb-2" htmlFor="image">Images</label>
               <div className="relative">

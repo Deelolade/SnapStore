@@ -23,6 +23,7 @@ const userSlice = createSlice({
             state.error = action.payload
         },
         logOut: (state)=>{
+            state.user = null;
             state.currentUser = null
             state.loading =false;
             state.error = null;

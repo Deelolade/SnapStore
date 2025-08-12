@@ -2,21 +2,26 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { User, Mail, Camera, Store, Plus, Trash2, Save, Upload, Info } from 'lucide-react'
+import { User, Mail, Camera, Store, Plus, Trash2, Save, Upload, Info, Phone } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useAuth } from '@clerk/clerk-react'
 import axios from 'axios'
 import { signInSuccess } from '../redux/user/userSlice'
+import { toast } from 'react-toastify'
+import { getErrorMessage } from '@/helpers/helpers'
+import { BsWhatsapp } from 'react-icons/bs'
+import { Select } from '@headlessui/react'
 
 // Yup validation schema based on user model
 const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
   email: yup.string().email('Invalid email format').required('Email is required'),
   profilePicture: yup.mixed(),
+  whatsappNumber: yup.string().required("whatsApp number is required").matches(/^(?:\+234|0)[789][01]\d{8}$/, "Make sure this number can be reached on whatsapp"),
   storeSlug: yup.string().required('Store address is required').min(3, 'Store address must be at least 3 characters'),
   socialMedia: yup.array().of(
     yup.object({
-      platform: yup.string().oneOf(['whatsapp', 'instagram', 'facebook', 'twitter', 'linkedin'], 'Invalid platform').required('Platform is required'),
+      platform: yup.string().oneOf(['instagram', 'facebook', 'twitter', 'linkedin'], 'Invalid platform').required('Platform is required'),
       url: yup.string().url('Must be a valid URL').required('URL is required')
     })
   )
@@ -48,6 +53,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
       name: currentUser?.name || '',
       email: currentUser?.email || '',
       profilePicture: currentUser?.profilePicture ,
+      whatsappNumber: currentUser?.whatsappNumber || "",
       storeSlug: currentUser?.storeSlug || '',
       socialMedia: currentUser?.socialMedia || []
     }
@@ -63,6 +69,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
         name: currentUser.name || '',
         email: currentUser.email || '',
         profilePicture: currentUser?.profilePicture || '',
+        whatsappNumber: currentUser?.whatsappNumber || "",
         storeSlug: currentUser.storeSlug || '',
         socialMedia: currentUser.socialMedia || []
       })
@@ -77,12 +84,14 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
       // Validate file type
       if (!file.type.startsWith('image/')) {
         alert('Please select an image file')
+        toast.info('Please select an image file')
         return
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size should be less than 5MB')
+        toast.info('Image size should be less than 5MB')
         return
       }
 
@@ -117,7 +126,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
   // Add social media link
   const addSocialMedia = () => {
     const currentSocialMedia = watch('socialMedia')
-    setValue('socialMedia', [...currentSocialMedia, { platform: 'whatsapp', url: '' }])
+    setValue('socialMedia', [...currentSocialMedia, { platform: 'instagram', url: '' }])
   }
 
   // Remove social media link
@@ -168,14 +177,11 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(null), 3000)
       //   }
-
-    } catch (error) {
-      console.error('Error updating profile:', error)
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to update profile'
-      setError(errorMessage)
-
-      // Clear error message after 5 seconds
-      setTimeout(() => setError(null), 5000)
+    }
+      catch (err) {
+        toast.error(getErrorMessage(err));
+        console.error("Create product error:", err.response?.data || err.message);
+        setTimeout(() => setError(null), 5000)
     } finally {
       setIsLoading(false)
     }
@@ -213,16 +219,16 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
           )}
 
           {/* Profile Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Profile Picture Section */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
               <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                 <div className="relative group">
                   <div className="relative">
                     <img
-                      src={imagePreview || currentUser?.profilePicture || 'https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png'}
+                      src={imagePreview || currentUser?.profilePicture }
                       alt="Profile"
-                      className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 shadow-lg group-hover:border-blue-300 transition-all duration-200"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 shadow-lg group-hover:border-blue-500 transition-all duration-200"
                     />
                     {isEditing && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
@@ -269,7 +275,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
             {/* Basic Information */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
               <h3 className="text-xl font-semibold text-gray-900 mb-6">Basic Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -318,6 +324,35 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
                   )}
                 </div>
 
+                 {/* whatsapp Number */}
+                 <div className="md:col-span-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    <BsWhatsapp className="inline w-4 h-4 mr-2 text-blue-600" />
+                    whatsapp Number
+                  </label>
+                  {isEditing ? (
+                    <div>
+                      <input
+                        type="text"
+                        {...register('whatsappNumber')}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        placeholder="+234-91 2345 6789"
+                      />
+                      {/* <p className="text-sm text-gray-500 mt-2 flex items-center">
+                        <Info className="w-4 h-4 mr-1" />
+                        This number will be the number reached on whatsapp.
+                      </p> */}
+                    </div>
+                  ) : (
+                    <p className="px-4 py-3 bg-gray-50 rounded-xl text-gray-900 font-medium">{watch('whatsappNumber')}</p>
+                  )}
+                  {errors.whatsappNumber && (
+                    <p className="text-red-500 text-sm mt-2 flex items-center">
+                      <Info className="w-4 h-4 mr-1" />
+                      {errors.whatsappNumber.message}
+                    </p>
+                  )}
+                </div>
                 {/* Store Address */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -349,6 +384,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
                 </div>
               </div>
             </div>
+
 
             {/* Social Media Links */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
@@ -385,16 +421,15 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
                     <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
                       {isEditing ? (
                         <>
-                          <select
+                          <Select
                             {...register(`socialMedia.${index}.platform`)}
-                            className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                            className="px-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
                           >
-                            <option value="whatsapp">WhatsApp</option>
                             <option value="instagram">Instagram</option>
                             <option value="facebook">Facebook</option>
                             <option value="twitter">Twitter</option>
                             <option value="linkedin">LinkedIn</option>
-                          </select>
+                          </Select>
                           <input
                             type="url"
                             {...register(`socialMedia.${index}.url`)}

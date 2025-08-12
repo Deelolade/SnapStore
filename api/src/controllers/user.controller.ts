@@ -29,11 +29,12 @@ export const clerkUserAuth = async(req:ClerkRequest, res:Response)=>{
 export const updateUserProfile = async(req:ClerkRequest, res:Response)=>{
   try {
     const {userId} = req.auth;
-    const { name, email, storeSlug, socialMedia,profilePictureUrl } = req.body;
+    const { name, email, storeSlug, socialMedia, phoneNumber, profilePictureUrl } = req.body;
     let updatedFields = {
       name,
       email,
       storeSlug,
+      phoneNumber,
       socialMedia:JSON.parse(socialMedia)
     };
     if (req.file) {

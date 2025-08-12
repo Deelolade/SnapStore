@@ -13,6 +13,7 @@ export interface UserDocument extends Document {
   email: string;
   profilePicture: string;
   storeSlug: string;
+  phoneNumber: Number;
   socialMedia: SocialLink[];
 }
 
@@ -40,6 +41,12 @@ const userSchema = new Schema<UserDocument>(
       unique: true,
       required: true
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      trim:true
+    },
     socialMedia: {
       type: [
         {
@@ -53,7 +60,7 @@ const userSchema = new Schema<UserDocument>(
       ],
       default: [],
     },
-    
+
   },
   { timestamps: true }
 );

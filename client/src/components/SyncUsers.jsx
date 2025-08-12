@@ -34,7 +34,7 @@ const SyncUsers = () => {
                 console.log("User ID:", userId);
                 dispatch(signInStart());
                 
-                const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/sync`, {
+                const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/sync`, {
                     userId,
                     email,
                     fullName,

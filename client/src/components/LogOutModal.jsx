@@ -15,7 +15,9 @@ const LogOutModal = ({isOpen, onClose}) => {
   const handleLogout = () => {
     signOut()
     onClose()
-    dispatch(logOut())
+    dispatch(logOut());
+    localStorage.clear();
+    sessionStorage.clear()
     navigate("/")
   }
   return (

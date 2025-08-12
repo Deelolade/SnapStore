@@ -1,28 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { toast } from 'react-toastify';
-import { X, Trash2, SendHorizontal, Share2 } from 'lucide-react';
+import { X, SendHorizontal, Share2 } from 'lucide-react';
+import { getErrorMessage } from '@/helpers/helpers';
 
-const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }) => {
+const SellerProductModal = ({ isOpen, onClose, package: product, sellerDetails:seller }) => {
+  console.log(seller)
+  console.log(product)
   const imageUrls = useMemo(() => {
     if (Array.isArray(product?.image)) return product.image.filter(Boolean)
-    if (product?.image) return [product.image]
+      if (product?.image) return [product.image]
     return []
   }, [product])
-
+  
   const [selectedImage, setSelectedImage] = useState(imageUrls[0] || '')
-
   useEffect(() => {
     setSelectedImage(imageUrls[0] || '')
   }, [imageUrls])
-
-  const handleDelete = () => {
-    if (!deleteProduct) return
-    deleteProduct(product._id)
-    onClose()
-    toast.success('Product deleted successfully!')
-  }
-
+  
   const handleShare = async () => {
     const shareUrl = window.location.href
     const title = product?.title || 'Product'
@@ -37,9 +32,10 @@ const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }
       } else {
         toast.info('Sharing not supported on this device')
       }
-    } catch (_) {
-      // ignore user-cancel or share errors
-    }
+    }catch (err) {
+      toast.error(getErrorMessage(err));
+      console.error("Create product error:", err.response?.data || err.message);
+    } 
   }
 
   if (!product) return null
@@ -60,7 +56,7 @@ const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }
                     {product.title}
                   </DialogTitle>
                   {product.slug && (
-                    <p className="text-xs text-gray-500 mt-1">Slug: <span className="text-gray-600">{product.slug}</span></p>
+                    <p className="text-sm text-gray-500 mt-1">Slug: <span className="text-gray-600">{product.slug}</span></p>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
@@ -124,6 +120,14 @@ const SellerProductModal = ({ isOpen, onClose, package: product, deleteProduct }
                   </div>
 
                   {/* Footer Actions */}
+                  {product.socialMedia.map((platform)=>{
+                    const link = seller.socialMedia.find(s => s.platform === platform)?.url
+                    return link && (
+                      <a key={platform} href={link} target="_blank" className='text-4xl'>
+                      Contact via {platform}
+                    </a>
+                    )
+                  })}
                   <div className="mt-auto flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <button
                       onClick={onClose}

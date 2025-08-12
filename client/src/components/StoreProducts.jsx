@@ -20,6 +20,7 @@ const StoreProducts = () => {
                 seller: res.data.seller,
                 cachedAt: Date.now()
             }
+            console.log(dataToCache)
             localStorage.setItem("store_data", JSON.stringify(dataToCache))
             setProducts(dataToCache.products)
             setSellerDetails(dataToCache.seller)
@@ -27,12 +28,12 @@ const StoreProducts = () => {
             const cachedData = localStorage.getItem("store_data");
             if(cachedData){
                 const { products, seller, cachedAt } = JSON.parse(cachedData);
-                const isStale = Date.now() - cachedAt > 5 * 60   * 1000;
-                if(!isStale){
-                    setProducts(products)
-                    setSellerDetails(seller)
-                    return;
-                }
+                // const isStale = Date.now() - cachedAt > 5 * 60   * 1000;
+                // if(!isStale){
+                //     setProducts(products)
+                //     setSellerDetails(seller)
+                //     return;
+                // }
             }
             console.log("Frontend error:", error.response?.data || error.message);
         }
@@ -121,6 +122,7 @@ const StoreProducts = () => {
                     isOpen={!!selectedProduct}
                     onClose={() => setSelectedProduct(null)}
                     package={selectedProduct}
+                    sellerDetails ={sellerDetails}
                 />
             )}
         </>
