@@ -9,6 +9,7 @@ const SyncUsers = () => {
     const { getToken, isLoaded:authLoaded } = useAuth();
     const { user, isSignedIn, isLoaded: userLoaded } = useUser();
     const [hasSynced, setHasSynced] = useState(false)
+    console.log(user)
 
     useEffect(() => {
         const syncUser = async () => {

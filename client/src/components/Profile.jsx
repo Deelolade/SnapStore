@@ -4,13 +4,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { User, Mail, Camera, Store, Plus, Trash2, Save, Upload, Info, Phone } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useAuth } from '@clerk/clerk-react'
+import { useAuth, useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import { signInSuccess } from '../redux/user/userSlice'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/helpers/helpers'
 import { BsWhatsapp } from 'react-icons/bs'
 import { Select } from '@headlessui/react'
+
 
 // Yup validation schema based on user model
 const profileSchema = yup.object({
@@ -37,7 +38,8 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const fileInputRef = useRef(null)
-
+  const { user, isSignedIn, isLoaded: userLoaded } = useUser();
+  console.log(user)
   console.log('Current user:', currentUser)
 console.log("currentUser?.profilePicture", currentUser?.profilePicture)
   const {
@@ -155,6 +157,7 @@ console.log("currentUser?.profilePicture", currentUser?.profilePicture)
       formData.append('name', data.name)
       formData.append('email', data.email)
       formData.append('storeSlug', data.storeSlug)
+      formData.append('whatsappNumber', data.whatsappNumber)
       formData.append('socialMedia', JSON.stringify(data.socialMedia))
 
       const response = await axios.put(

@@ -13,7 +13,7 @@ export interface UserDocument extends Document {
   email: string;
   profilePicture: string;
   storeSlug: string;
-  phoneNumber: Number;
+  whatsappNumber: string;
   socialMedia: SocialLink[];
 }
 
@@ -41,7 +41,7 @@ const userSchema = new Schema<UserDocument>(
       unique: true,
       required: true
     },
-    phoneNumber: {
+    whatsappNumber: {
       type: String,
       required: true,
       unique: true,

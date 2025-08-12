@@ -90,10 +90,10 @@ const CreateProduct = () => {
   };
   return (
     <>
-      <main className=" w-[85%] px-8 h-screen py-10 max-h-screen overflow-y-auto ">
+      <main className=" w-[85%] px-12 h-screen py-10 max-h-screen overflow-y-auto bg-gray-50 ">
         <h1 className='text-4xl font-semibold'>Create Product</h1>
         <section className='mt-6 '>
-          <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-lg rounded-xl p-8 max-w-2xl mx-auto flex flex-col gap-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-lg rounded-2xl p-8 max-w-4xl mx-auto flex flex-col gap-4">
             <div>
               <label className="block text-lg font-medium mb-2" htmlFor="title">Title<span className="text-red-500">*</span></label>
               <input

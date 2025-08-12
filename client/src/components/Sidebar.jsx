@@ -1,4 +1,3 @@
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { PiSquaresFourBold } from "react-icons/pi";
 import { FaRegCaretSquareUp } from "react-icons/fa";
 import { RiSettings4Fill } from "react-icons/ri";
@@ -22,7 +21,7 @@ const Sidebar = () => {
                         <NavLink
                             to="/dashboard"
                             className={({ isActive }) =>
-                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-slate-200 ${isActive ? "bg-slate-300 text-black font-semibold" : ""
+                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-zinc-100 ${isActive ? "bg-zinc-200 text-black font-semibold" : ""
                                 }`
                             }
                         >
@@ -31,7 +30,7 @@ const Sidebar = () => {
                         <NavLink
                             to="/products"
                             className={({ isActive }) =>
-                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-slate-200 ${isActive ? "bg-slate-300 text-black font-semibold" : ""
+                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-zinc-100 ${isActive ? "bg-zinc-200 text-black font-semibold" : ""
                                 }`
                             }
                         >
@@ -40,7 +39,7 @@ const Sidebar = () => {
                         <NavLink
                             to="/add-products"
                             className={({ isActive }) =>
-                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-slate-200 ${isActive ? "bg-slate-300 text-black font-semibold" : ""
+                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-zinc-100 ${isActive ? "bg-zinc-200 text-black font-semibold" : ""
                                 }`
                             }
                         >
@@ -49,7 +48,7 @@ const Sidebar = () => {
                         <NavLink
                             to="/settings"
                             className={({ isActive }) =>
-                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-slate-200 ${isActive ? "bg-slate-300 text-black font-semibold" : ""
+                                `w-full p-3 rounded-lg my-2 flex items-center text-lg font-medium hover:bg-zinc-100 ${isActive ? "bg-zinc-200 text-black font-semibold" : ""
                                 }`
                             }
                         >
@@ -58,7 +57,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <div className="relative">
-                    <button className="flex items-center gap-3 hover:bg-slate-200 p-2 rounded-md" onClick={()=>setShowDropdown((prev) => !prev)}>
+                    <button className="flex items-center gap-3 hover:bg-zinc-200 p-2 rounded-md" onClick={()=>setShowDropdown((prev) => !prev)}>
                         <img
                             src={currentUser?.profilePicture || '/default-avatar.png'}
                             alt=""
