@@ -4,16 +4,38 @@ import { toast } from 'react-toastify';
 import { X, SendHorizontal, Share2 } from 'lucide-react';
 import { getErrorMessage } from '@/helpers/helpers';
 import { BsWhatsapp } from 'react-icons/bs';
+import axios from 'axios';
 
 const SellerProductModal = ({ isOpen, onClose, package: product, sellerDetails: seller }) => {
+  const productId = product._id;
   const imageUrls = useMemo(() => {
     if (Array.isArray(product?.image)) return product.image.filter(Boolean)
-    if (product?.image) return [product.image]
+      if (product?.image) return [product.image]
     return []
   }, [product])
-
+  
   const [selectedImage, setSelectedImage] = useState(imageUrls[0] || '')
+  const [productViews, setProductViews] = useState(0)
+  
 
+
+
+// create views function
+
+
+useEffect(()=>{
+  if (!productId) return;
+  const trackViews = async()=>{
+    try {
+      const res = await  axios.post(`${import.meta.env.VITE_API_BASE_URL}/product/${productId}/view`);
+      // setProductViews(res.data.response)
+      console.log(productViews)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  trackViews()
+},[productId])
   useEffect(() => {
     setSelectedImage(imageUrls[0] || '')
   }, [imageUrls])

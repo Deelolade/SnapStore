@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
-import cloudinary, { uploadImages } from "../utils/cloudinary";
+import { uploadImages } from "../utils/cloudinary";
+import { ProductView } from "../models/productView.model";
 
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
@@ -83,8 +84,6 @@ export const createProduct = async (req: AuthenticatedRequest, res: Response, ne
       }
 }
 
-
-
 export const getMyProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const clerkUserId = req.user; // This is the Clerk user ID
@@ -109,5 +108,27 @@ export const getMyProducts = async (req: AuthenticatedRequest, res: Response, ne
         });
     } catch (error) {
         next(error)
+    }
+}
+
+export const createProductView = async (req: Request, res: Response, next: NextFunction) =>{
+    try {
+        const { productId } = req.params;
+        const ipAddress = req.ip;
+        if (!productId) {
+          return res.status(400).json({ success: false, message: "Product ID is required" });
+        }
+
+        const existingView = await ProductView.findOne({productId, ipAddress});
+        if(!existingView){
+          await ProductView.create({productId, ipAddress});
+        }
+        const totalViews =await  ProductView.countDocuments({productId})
+        res.status(200).json({
+          sucess:true,
+          views: totalViews
+        })
+    } catch (error) {
+      next(error)
     }
 }
