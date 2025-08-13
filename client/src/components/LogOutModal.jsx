@@ -45,7 +45,7 @@ const LogOutModal = ({isOpen, onClose}) => {
                 className="bg-red hover:bg-red/90 p-2 px-4 font-semibold rounded-lg text-white cursor-progress"
                 onClick={handleLogout}
               >
-                Yes, Log out
+                Yes. Log out !!
               </Button>
             </div>
 
