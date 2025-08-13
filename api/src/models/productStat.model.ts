@@ -7,12 +7,13 @@ export interface ProductViewDocument extends Document{
     createdAt?: Date
 } 
 
-const productViewSchema = new mongoose.Schema({
+const productStatSchema = new mongoose.Schema({
     productId: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Types.ObjectId, 
         ref: "Product",
         required: true
     },
+    
     ipAddress:{
         type: String,
         required: true
@@ -23,4 +24,5 @@ const productViewSchema = new mongoose.Schema({
         expires:86400,
     }
 })
-export const ProductView = mongoose.model<ProductViewDocument>("ProductView", productViewSchema)
+export const ProductView = mongoose.model<ProductViewDocument>("ProductView", productStatSchema)
+export const ProductClick = mongoose.model<ProductViewDocument>("ProductClick", productStatSchema)

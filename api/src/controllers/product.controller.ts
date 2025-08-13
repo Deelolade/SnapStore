@@ -3,7 +3,8 @@ import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
 import { uploadImages } from "../utils/cloudinary";
-import { ProductView } from "../models/productView.model";
+import { ProductView } from "../models/productStat.model";
+import mongoose from "mongoose";
 
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
@@ -110,7 +111,6 @@ export const getMyProducts = async (req: AuthenticatedRequest, res: Response, ne
         next(error)
     }
 }
-
 export const createProductView = async (req: Request, res: Response, next: NextFunction) =>{
     try {
         const { productId } = req.params;
@@ -131,4 +131,49 @@ export const createProductView = async (req: Request, res: Response, next: NextF
     } catch (error) {
       next(error)
     }
+}
+export const createProductClicks = async (req: Request, res: Response, next: NextFunction) =>{
+  try {
+      const { productId } = req.params;
+      const ipAddress = req.ip;
+      if (!productId) {
+        return res.status(400).json({ success: false, message: "Product ID is required" });
+      }
+
+      const existingClick = await ProductView.findOne({productId, ipAddress});
+      if(!existingClick){
+        await ProductView.create({productId, ipAddress});
+      }
+      const totalClicks = await  ProductView.countDocuments({productId})
+      res.status(200).json({
+        sucess:true,
+        clicks: totalClicks
+      })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getProductViews = async (req:AuthenticatedRequest, res: Response, next: NextFunction) =>{
+  try {
+      const { productId } = req.params;
+
+      if (!productId) {
+        return res.status(400).json({ success: false, message: "Product ID is required" });
+      }
+     const totalViews = await ProductView.countDocuments({
+      productId: new mongoose.Types.ObjectId(productId)
+    });
+    const totalClicks = await ProductView.countDocuments({
+      productId: new mongoose.Types.ObjectId(productId)
+    });
+
+      res.status(200).json({
+        sucess:true,
+        views: totalViews,
+        clicks: totalClicks
+      })
+  } catch (error) {
+    next(error)
+  }
 }

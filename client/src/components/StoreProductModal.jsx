@@ -14,28 +14,30 @@ const SellerProductModal = ({ isOpen, onClose, package: product, sellerDetails: 
     return []
   }, [product])
   
-  const [selectedImage, setSelectedImage] = useState(imageUrls[0] || '')
-  const [productViews, setProductViews] = useState(0)
-  
+  const [selectedImage, setSelectedImage] = useState(imageUrls[0] || '')  
 
-
-
-// create views function
-
-
+// create views functionality
 useEffect(()=>{
   if (!productId) return;
   const trackViews = async()=>{
     try {
-      const res = await  axios.post(`${import.meta.env.VITE_API_BASE_URL}/product/${productId}/view`);
-      // setProductViews(res.data.response)
-      console.log(productViews)
+     await  axios.post(`${import.meta.env.VITE_API_BASE_URL}/product/${productId}/view`);
     } catch (error) {
       console.log(error)
     }
   }
   trackViews()
 },[productId])
+// create click functionality
+
+const handleProductClicks = async()=>{
+  try {
+    const res = await  axios.post(`${import.meta.env.VITE_API_BASE_URL}/product/${productId}/click`);
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
   useEffect(() => {
     setSelectedImage(imageUrls[0] || '')
   }, [imageUrls])
@@ -71,6 +73,7 @@ useEffect(()=>{
   } 
   console.log(formattedWhatsappNumber(seller.whatsappNumber))
   const openChat = () => {
+    handleProductClicks()
     if (!seller?.whatsappNumber) {
       toast.info("Seller has no WhatsApp number available.");
       return;
