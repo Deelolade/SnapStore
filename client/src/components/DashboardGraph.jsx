@@ -45,7 +45,7 @@ const data = [
   },
 ];
 
-export default function Example() {
+export default function DashBoardGraph() {
   return (
     <div className="w-full h-96 bg-white my-6 p-3 rounded-lg shadow-lg "> 
            <ResponsiveContainer width="100%" height="100%">

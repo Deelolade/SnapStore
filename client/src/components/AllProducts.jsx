@@ -37,7 +37,7 @@ const AllProducts = () => {
       }else {
         // No token (probably offline), try to load from cache
         const cachedData = localStorage.getItem("my_products");
-        console.log("hellooo")
+        
         if (cachedData) {
           setProducts(JSON.parse(cachedData));
         } else {

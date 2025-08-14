@@ -1,20 +1,52 @@
-import React from 'react'
-import imageOne from "@/images/bagSet.jpg"
-import imageTwo from "@/images/shoe.jpg"
+import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 
 const DashboardProductLists = () => {
-    const packages = [
-        { name: "Leather Tote Bag", views: 3100, clicks: 720, image: imageOne },
-        { name: "Suede Ankle Boots", views: 2900, clicks: 680, image: imageTwo },
-        { name: "Denim Crossbody", views: 2400, clicks: 590, image: imageOne },
-        { name: "Classic Heels", views: 1800, clicks: 470, image: imageOne },
-        { name: "Floral Maxi Dress", views: 3600, clicks: 920, image: imageTwo },
-        { name: "Canvas Backpack", views: 3300, clicks: 800, image: imageOne },
-        { name: "Silk Headscarf", views: 1900, clicks: 460, image: imageTwo },
-        { name: "Rattan Handbag", views: 2500, clicks: 620, image: imageTwo },
-        { name: "Chunky Sneakers", views: 4000, clicks: 1050, image: imageTwo },
-        { name: "Linen Tote", views: 2200, clicks: 550, image: imageOne },
-    ];
+    const { getToken } = useAuth();
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+    const [packages, setPackages]= useState([])
+    const getMyProducts = async () => {
+        setLoading(true)
+        try {
+          let token = null
+    
+          try {
+            token = await getToken();
+          } catch (tokenError) {
+            console.warn("Token fetch failed (offline?):", tokenError.message);
+          }
+          if (token) {
+            const res = await axios.get(`${API_URL}/product/me`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            console.log((res.data.products))
+            setPackages(res.data.products)
+          }else {
+            // No token (probably offline), try to load from cache
+            
+            if (cachedData) {
+              setPackages(JSON.parse(cachedData));
+            } else {
+              setPackages([]); // or show a message: "No products available offline"
+            }
+          } 
+        } catch (error) {
+          console.log("Frontend error:", error.response?.data || error.message);
+          
+        } finally {
+          setLoading(false)
+        }
+      }
+      useEffect(() => {
+        getMyProducts();
+      }, [])
     return (
         <section className='bg-white shadow-lg rounded-xl'>
             <div className=" me-5  w-full items-center grid grid-cols-5 px-6 py-3 shadow-md z-10 bg-white sticky top-0 rounded-t-lg">

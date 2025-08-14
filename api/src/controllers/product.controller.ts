@@ -3,7 +3,7 @@ import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
 import { uploadImages } from "../utils/cloudinary";
-import { ProductView } from "../models/productStat.model";
+import { ProductClick, ProductView } from "../models/productStat.model";
 import mongoose from "mongoose";
 
 
@@ -120,7 +120,7 @@ export const createProductView = async (req: Request, res: Response, next: NextF
         }
 
         const existingView = await ProductView.findOne({productId, ipAddress});
-        if(!existingView){
+      if(!existingView || Date.now() - existingView.createdAt.getTime() > 60 * 60 * 1000){
           await ProductView.create({productId, ipAddress});
         }
         const totalViews =await  ProductView.countDocuments({productId})
@@ -140,11 +140,11 @@ export const createProductClicks = async (req: Request, res: Response, next: Nex
         return res.status(400).json({ success: false, message: "Product ID is required" });
       }
 
-      const existingClick = await ProductView.findOne({productId, ipAddress});
-      if(!existingClick){
-        await ProductView.create({productId, ipAddress});
+      const existingClick = await ProductClick.findOne({productId, ipAddress});
+      if(!existingClick || Date.now() - existingClick.createdAt.getTime() > 1 * 60 * 1000){
+        await ProductClick.create({productId, ipAddress});
       }
-      const totalClicks = await  ProductView.countDocuments({productId})
+      const totalClicks = await  ProductClick.countDocuments({productId})
       res.status(200).json({
         sucess:true,
         clicks: totalClicks
@@ -154,7 +154,7 @@ export const createProductClicks = async (req: Request, res: Response, next: Nex
   }
 }
 
-export const getProductViews = async (req:AuthenticatedRequest, res: Response, next: NextFunction) =>{
+export const getProductStats = async (req:AuthenticatedRequest, res: Response, next: NextFunction) =>{
   try {
       const { productId } = req.params;
 
@@ -163,8 +163,8 @@ export const getProductViews = async (req:AuthenticatedRequest, res: Response, n
       }
      const totalViews = await ProductView.countDocuments({
       productId: new mongoose.Types.ObjectId(productId)
-    });
-    const totalClicks = await ProductView.countDocuments({
+    }); 
+    const totalClicks = await ProductClick.countDocuments({
       productId: new mongoose.Types.ObjectId(productId)
     });
 
