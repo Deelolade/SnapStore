@@ -141,7 +141,7 @@ export const createProductClicks = async (req: Request, res: Response, next: Nex
       }
 
       const existingClick = await ProductClick.findOne({productId, ipAddress});
-      if(!existingClick || Date.now() - existingClick.createdAt.getTime() > 1 * 60 * 1000){
+      if(!existingClick || Date.now() - existingClick.createdAt.getTime() > 60 * 60 * 1000){
         await ProductClick.create({productId, ipAddress});
       }
       const totalClicks = await  ProductClick.countDocuments({productId})
@@ -161,6 +161,7 @@ export const getProductStats = async (req:AuthenticatedRequest, res: Response, n
       if (!productId) {
         return res.status(400).json({ success: false, message: "Product ID is required" });
       }
+      const product = await Product.findById(productId)
      const totalViews = await ProductView.countDocuments({
       productId: new mongoose.Types.ObjectId(productId)
     }); 
@@ -170,10 +171,64 @@ export const getProductStats = async (req:AuthenticatedRequest, res: Response, n
 
       res.status(200).json({
         sucess:true,
+        product:product,
         views: totalViews,
         clicks: totalClicks
       })
   } catch (error) {
     next(error)
+  }
+}
+
+export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  try {
+      const clerkUserId = req.user; // This is the Clerk user ID
+      
+      if (!clerkUserId) {
+          res.status(401).json({ message: "Unauthorized !. Seller not found" });
+          return;
+      }
+      
+      // Find the user in your database using the Clerk ID
+      const user = await User.findOne({ clerkId: clerkUserId });
+      if (!user) {
+          res.status(404).json({ message: "User not found in database" });
+          return;
+      }
+      
+      // Use the database user ID for the product query
+      const products = await Product.aggregate([
+        { $match: {sellerId :user._id}},
+        {
+            $lookup :{
+              from: "productviews",
+              localField:'_id',
+              foreignField:'productId',
+              as:'views'
+            }
+        },
+        {
+          $lookup:{
+            from:'productclicks',
+            localField:'_id',
+              foreignField:'productId',
+              as:'clicks'
+          }
+        },
+        {
+          $addFields:{
+            viewCount:{ $size: '$views'},
+            clickCount:{ $size: '$clicks'}
+          }
+        }
+      ]);
+
+
+      res.status(200).json({
+          success: true,
+          products
+      });
+  } catch (error) {
+      next(error)
   }
 }

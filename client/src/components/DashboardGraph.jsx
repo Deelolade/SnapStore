@@ -65,8 +65,8 @@ export default function DashBoardGraph() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="views" stroke="#8884d8" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="clicks" stroke="#82ca9d" />
             </LineChart>
           </ResponsiveContainer>
         </div>

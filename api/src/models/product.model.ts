@@ -28,14 +28,6 @@ const productSchema = new mongoose.Schema({
     image:{
         type: [String],
     },
-    views: { 
-        type: Number, 
-        default: 0
-    },
-    clicks: { 
-        type: Number, 
-        default: 0 
-    },
     slug: { 
         type: String, 
         unique: true,

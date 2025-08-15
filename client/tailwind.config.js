@@ -24,7 +24,7 @@ export default {
       'lightblue': '#0056D2',
       'lightpurple': '#C5C5E2',
       'lightorange': '#FFC8AB',
-      'lightgray': '#F5F5F54D',
+      'lightgray': '#F5F5F5',
       // Keep some default colors you might need
       'white': '#ffffff',
       'black': '#000000',
