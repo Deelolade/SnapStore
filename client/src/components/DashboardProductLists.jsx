@@ -1,7 +1,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedProduct} from '@/redux/products/productSlice'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DashboardProductLists = () => {
   const [productId, setProductId] = useState(null)
@@ -12,8 +12,11 @@ const DashboardProductLists = () => {
     console.log("prod",prod)
     dispatch(setSelectedProduct(prod));
     setProductId(prod);
-    // console.log("new product",productId)
   };
+
+  useEffect(()=>{
+    setProductId(products[0])
+  },[])
 
   return (
     <section className='bg-white shadow-lg rounded-xl'>
@@ -35,8 +38,8 @@ const DashboardProductLists = () => {
         className={`grid grid-cols-5 gap-3 p-3 items-center e border-t  hover:bg-gray-100 transition-colors ${productId?._id == prd._id ? " bg-gray-200":"bg-white"}`}
       >
         <img
-          src={prd.image[0]}
-          alt={prd.title}
+          src={Array.isArray(prd.image) ? prd.image[0] : prd.image}
+          alt={prd.slug}
           className="h-32 w-44 object-cover"
         />
         <p className="text-center text-lg font-semibold capitalize">{prd.title}</p>
@@ -44,7 +47,7 @@ const DashboardProductLists = () => {
         <p className="text-center">{prd.clickCount} clicks</p>
         <div className="mx-auto">
         <button className="py-2 px-3 text-white bg-green rounded-xl">
-          View Analytics
+          {productId?._id === prd._id ? "selected":"View Analytics"}
         </button>
         </div>
       </div>

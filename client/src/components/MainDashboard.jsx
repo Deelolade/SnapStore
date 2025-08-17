@@ -40,7 +40,7 @@ getProductStats()
           <h1 className='text-4xl font-semibold'>Welcome, {currentUser.name.split(" ").at(-1)} 👋</h1>
           <ShareLinkButton />
         </div>
-        <DashBoardGraph />
+        <DashBoardGraph day={days}  setDay={setDays} />
         <DashboardProductLists />
       </main>
     </>

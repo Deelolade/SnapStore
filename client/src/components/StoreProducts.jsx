@@ -88,7 +88,7 @@ const StoreProducts = () => {
                                         <div className="border-t border-gray-100 pt-4">
                                             <div className="flex items-center justify-between">
                                                 <div>
-                                                    <span className="text-2xl font-semibold text-gray-500">${pkg.price}</span>
+                                                    <span className="text-2xl font-semibold text-gray-500"># {pkg.price.toLocaleString()}</span>
                                                     {pkg.discountedPrice && pkg.discountedPrice < pkg.price && (
                                                         <span className="text-sm text-gray-400 line-through ml-2">${pkg.price}</span>
                                                     )}
