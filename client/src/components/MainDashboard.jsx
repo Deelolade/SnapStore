@@ -2,7 +2,7 @@ import DashBoardGraph from './DashboardGraph'
 import { useDispatch, useSelector } from 'react-redux'
 import DashboardProductLists from './DashboardProductLists'
 import ShareLinkButton from './shareLinkButton'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '@clerk/clerk-react'
 import { setSelectedProduct, setProducts } from '@/redux/products/productSlice'
@@ -13,31 +13,7 @@ const MainDashboard = () => {
   const dispatch = useDispatch();
   const { getToken } = useAuth();
   const currentUser = useSelector((state) => state.user.user)
-
-  //fecth single product
-useEffect(()=>{
-  const getProductStats = async()=>{
-    const token = await getToken();
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/product/6897067d6f58d83d27aeb02e/stats`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }); 
-      dispatch(setSelectedProduct({
-        ...res.data.product,
-        views: res.data.views,
-        clicks: res.data.clicks
-      }))
-      // console.log(setSelectedProduct(res.data))
-      //  console.log(res.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-getProductStats()
-})
-
+  const [days, setDays] = useState(7);
 
 
 // fetch multiple user products
@@ -45,7 +21,7 @@ useEffect(()=>{
   const getProductStats = async()=>{
     const token = await getToken();
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/product/allstats`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/product/allstats?days=${days}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -56,7 +32,7 @@ useEffect(()=>{
     }
   }
 getProductStats()
-})
+},[days])
   return (
     <>
       <main className=" w-[85%] px-8 h-screen py-10">

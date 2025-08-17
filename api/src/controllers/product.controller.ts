@@ -182,53 +182,87 @@ export const getProductStats = async (req:AuthenticatedRequest, res: Response, n
 
 export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-      const clerkUserId = req.user; // This is the Clerk user ID
-      
-      if (!clerkUserId) {
-          res.status(401).json({ message: "Unauthorized !. Seller not found" });
-          return;
-      }
-      
-      // Find the user in your database using the Clerk ID
-      const user = await User.findOne({ clerkId: clerkUserId });
-      if (!user) {
-          res.status(404).json({ message: "User not found in database" });
-          return;
-      }
-      
-      // Use the database user ID for the product query
-      const products = await Product.aggregate([
-        { $match: {sellerId :user._id}},
-        {
-            $lookup :{
-              from: "productviews",
-              localField:'_id',
-              foreignField:'productId',
-              as:'views'
-            }
-        },
-        {
-          $lookup:{
-            from:'productclicks',
-            localField:'_id',
-              foreignField:'productId',
-              as:'clicks'
-          }
-        },
-        {
-          $addFields:{
-            viewCount:{ $size: '$views'},
-            clickCount:{ $size: '$clicks'}
-          }
-        }
-      ]);
+    const clerkUserId = req.user; // Clerk user ID
 
+    if (!clerkUserId) {
+      return res.status(401).json({ message: "Unauthorized! Seller not found" });
+    }
 
-      res.status(200).json({
-          success: true,
-          products
-      });
+    // Number of days for analytics, default 7
+    const days = parseInt(req.query.days as string) || 7;
+
+    // Generate last X days in YYYY-MM-DD format
+    const lastDays = Array.from({ length: days }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (days - 1 - i)); // chronological order
+      return d.toISOString().slice(0, 10);
+    });
+
+    // Find seller in database
+    const user = await User.findOne({ clerkId: clerkUserId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found in database" });
+    }
+
+    // Fetch all products for this seller
+    const products = await Product.find({ sellerId: user._id })
+      .lean() // convert Mongoose docs to plain objects
+      .exec();
+
+    // For each product, fetch daily views and clicks in the last X days
+    const productsWithAnalytics = await Promise.all(
+      products.map(async (prod) => {
+        // Fetch daily views for this product
+        const dailyViews = await ProductView.aggregate([
+          { $match: { productId: prod._id, createdAt: { $gte: new Date(lastDays[0]) } } },
+          {
+            $group: {
+              _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+              count: { $sum: 1 },
+            },
+          },
+        ]);
+
+        // Fetch daily clicks for this product
+        const dailyClicks = await ProductClick.aggregate([
+          { $match: { productId: prod._id, createdAt: { $gte: new Date(lastDays[0]) } } },
+          {
+            $group: {
+              _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+              count: { $sum: 1 },
+            },
+          },
+        ]);
+
+        // Map over lastDays to create analytics array
+        const analytics = lastDays.map((date) => {
+          const views = dailyViews.find(v => v._id === date)?.count || 0;
+          const clicks = dailyClicks.find(c => c._id === date)?.count || 0;
+          return { date, views, clicks };
+        });
+
+        // Compute total views and clicks
+        const viewCount = analytics.reduce((sum, a) => sum + a.views, 0);
+        const clickCount = analytics.reduce((sum, a) => sum + a.clicks, 0);
+
+        return {
+          ...prod,
+          dailyViews,
+          dailyClicks,
+          analytics,
+          viewCount,
+          clickCount,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      success: true,
+      products: productsWithAnalytics,
+      days,
+    });
   } catch (error) {
-      next(error)
+    next(error);
   }
-}
+};
+

@@ -1,11 +1,19 @@
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedProduct} from '@/redux/products/productSlice'
+import { useState } from 'react';
 
 const DashboardProductLists = () => {
-
-
+  const [productId, setProductId] = useState(null)
+  const dispatch = useDispatch()
   const products  = useSelector((state) => state.product.products)
-  console.log(products)
+
+  const handleGraphData =(prod)=>{
+    console.log("prod",prod)
+    dispatch(setSelectedProduct(prod));
+    setProductId(prod);
+    // console.log("new product",productId)
+  };
 
   return (
     <section className='bg-white shadow-lg rounded-xl'>
@@ -14,28 +22,31 @@ const DashboardProductLists = () => {
         <p className='text-center font-semibold text-lg'>Name</p>
         <p className='text-center font-semibold text-lg'>Views</p>
         <p className='text-center font-semibold text-lg'>Clicks</p>
-        <p className='text-center font-semibold text-lg'>Action</p>
+        <p className='text-center font-semibold text-lg'>Analytics</p>
       </div>
       <div className='overflow-y-auto max-h-[360px] p-3 bg-white rounded-lg scrollbar-hide '>
 
       {products.length > 0 ? (
-  <div className="overflow-y-auto max-h-96">
-    {products.map((pkg, idx) => (
+  <div className="">
+    {products.map((prd, idx) => (
       <div
         key={idx}
-        className="grid grid-cols-5 gap-3 p-3 items-center bg-white border-t hover:bg-gray-100 transition-colors"
+        onClick={()=>handleGraphData(prd)}
+        className={`grid grid-cols-5 gap-3 p-3 items-center e border-t  hover:bg-gray-100 transition-colors ${productId?._id == prd._id ? " bg-gray-200":"bg-white"}`}
       >
         <img
-          src={pkg.image[0]}
-          alt={pkg.title}
+          src={prd.image[0]}
+          alt={prd.title}
           className="h-32 w-44 object-cover"
         />
-        <p className="text-center text-lg font-semibold capitalize">{pkg.title}</p>
-        <p className="text-center">{pkg.viewCount} views</p>
-        <p className="text-center">{pkg.clickCount} clicks</p>
+        <p className="text-center text-lg font-semibold capitalize">{prd.title}</p>
+        <p className="text-center">{prd.viewCount} views</p>
+        <p className="text-center">{prd.clickCount} clicks</p>
+        <div className="mx-auto">
         <button className="py-2 px-3 text-white bg-green rounded-xl">
-          View Product
+          View Analytics
         </button>
+        </div>
       </div>
     ))}
   </div>
