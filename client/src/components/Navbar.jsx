@@ -46,22 +46,18 @@ const Navbar = () => {
               navlinks.slice(3).map((link, idx) => {
                 if (link.name === "For Sellers") {
                   return (
-                    <SignUpButton key={idx} mode="modal" redirectUrl="/dashboard" asChild>
-                      {/* <Slot> */}
+                    <SignUpButton key={idx} mode="modal" redirecturl="/dashboard">
                       <button className="bg-green text-white px-4 py-2 rounded-3xl  font-medium hover:bg-green/90">
                         {link.name}
                       </button>
-                      {/* </Slot> */}
                     </SignUpButton>
                   )
                 } else if (link.name === "Login") {
                   return (
-                    <SignInButton key={idx} mode="modal" redirectUrl="/dashboard" asChild >
-                      {/* <Slot> */}
+                    <SignInButton key={idx} mode="modal" redirecturl="/dashboard" >
                       <button className="bg-orange text-white px-4 py-2 rounded-3xl  font-medium hover:bg-orange/90">
                         {link.name}
                       </button>
-                      {/* </Slot> */}
                     </SignInButton>
                   )
                 }

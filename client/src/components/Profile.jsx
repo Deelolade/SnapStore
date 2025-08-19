@@ -29,7 +29,7 @@ const profileSchema = yup.object({
 })
 
 const Profile = () => {
-  const currentUser = useSelector((state) => state.user.user)
+  const { currentUser } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const { getToken } = useAuth()
   const [isEditing, setIsEditing] = useState(false)

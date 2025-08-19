@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import ShareLinkModal from './ShareLinkModal';
 
 const ShareLinkButton = () => {
-    const currentUser = useSelector((state) => state.user.user)
+    const { currentUser } = useSelector((state) => state.user)
   const [shareLink, setShareLink] = useState(null);
 
     return (

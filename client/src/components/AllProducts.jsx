@@ -35,13 +35,11 @@ const AllProducts = () => {
         setProducts(res.data.products)
         localStorage.setItem("my_products", JSON.stringify(res.data.products))
       }else {
-        // No token (probably offline), try to load from cache
         const cachedData = localStorage.getItem("my_products");
-        
         if (cachedData) {
           setProducts(JSON.parse(cachedData));
         } else {
-          setProducts([]); // or show a message: "No products available offline"
+          setProducts([]);
         }
       }
     } catch (error) {
@@ -126,12 +124,12 @@ const AllProducts = () => {
                     <div className="flex items-center space-x-8 py-1">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm font-semibold text-gray-900">{pkg.views}</span>
+                        <span className="text-sm font-semibold text-gray-900">{pkg.viewCount}</span>
                         <span className="text-xs text-gray-500 uppercase tracking-wide">Views</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm font-semibold text-gray-900">{pkg.clicks}</span>
+                        <span className="text-sm font-semibold text-gray-900">{pkg.clickCount}</span>
                         <span className="text-xs text-gray-500 uppercase tracking-wide">Clicks</span>
                       </div>
                     </div>

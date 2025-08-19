@@ -12,19 +12,18 @@ const DashBoardGraph = ({ day,setDay }) => {
   const filteredData = useMemo(() => {
     if (!selectedProduct?.analytics) return [];
     // Get the last N days, where N = day
-
      const formatDate = (dateString)=>{
         return  new Date(dateString).toLocaleDateString("en-us",{
+          day: "numeric",
           month: "short",
-          day: "numeric"
         })
      }
     return selectedProduct.analytics
       .slice(-day) // assumes analytics is sorted oldest -> newest
       .map(item => ({
         name:formatDate(item.date),
-        views: item.views,
-        clicks: item.clicks
+        views: item.views || 0,
+        clicks: item.clicks || 0,
       }));
   }, [selectedProduct, day]);
   return (

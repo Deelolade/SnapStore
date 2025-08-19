@@ -9,7 +9,7 @@ import { useState } from "react";
 import LogOutModal from "./LogOutModal";
 
 const Sidebar = () => {
-    const  currentUser = useSelector((state) => state.user.user )
+    const { currentUser } = useSelector((state) => state.user)
     const [isOpen, setIsOpen] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     return (

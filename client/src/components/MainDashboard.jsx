@@ -12,7 +12,7 @@ import { setSelectedProduct, setProducts } from '@/redux/products/productSlice'
 const MainDashboard = () => {
   const dispatch = useDispatch();
   const { getToken } = useAuth();
-  const currentUser = useSelector((state) => state.user.user)
+  const { currentUser } = useSelector((state) => state.user)
   const [days, setDays] = useState(7);
 
 
