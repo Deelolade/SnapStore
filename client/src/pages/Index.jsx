@@ -1,13 +1,13 @@
-import Navbar from '@/components/Navbar'
-import { SignUp } from '@clerk/clerk-react'
-import React from 'react'
+import About from '@/components/landingpage/About'
+import HeroSection from '@/components/landingpage/HeroSection'
+import Navbar from '@/components/landingpage/Navbar'
 
 const Index = () => {
   return (
     <div>
       <Navbar/>
-      <h2 className='text-5xl'>hello world </h2>
-      <h2 className='text-5xl'>landing page</h2>
+      <HeroSection/>
+      <About/>
     </div>
   )
 }

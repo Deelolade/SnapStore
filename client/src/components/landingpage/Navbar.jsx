@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { SignInButton, SignUpButton, useUser, SignedIn, useClerk } from '@clerk/clerk-react'
-import SyncUsers from './SyncUsers'
+import SyncUsers from '../SyncUsers'
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -23,13 +23,13 @@ const Navbar = () => {
   }, [isSignedIn, navigate])
   return (
 
-    <div className="w-full h-[8vh] shadow-md fixed z-50">
+    <div className="w-full h-[8vh] shadow-md fixed z-50 bg-white">
       <nav className='flex justify-between items-center h-[8vh] px-6 py-4 bg-white  max-w-6xl mx-auto'>
         {/* Left - Logo and first 3 links */}
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center justify-between w-[60%]">
           <h2 className='text-3xl font-bold text-gray-900'>SnapStore</h2>
           {!isSignedIn && (
-            <div className="flex space-x-6 items-center">
+            <div className="flex space-x-8 items-center">
               {navlinks.slice(0, 3).map((link, idx) => (
                 <Link key={idx} to={link.to} className="text-gray-600 hover:text-gray-900 transition-colors">
                   {link.name}

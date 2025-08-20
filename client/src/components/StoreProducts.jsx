@@ -1,12 +1,15 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import SellerProductModal from './StoreProductModal';
 import { Package } from "lucide-react"
+import { motion } from 'framer-motion';
+
 
 
 const StoreProducts = () => {
-    const { slugName } = useParams();
+    const navigate = useNavigate()
+    const { slugName,productId } = useParams();
     const [products, setProducts] = useState([])
     const [sellerDetails, setSellerDetails] = useState("")
     const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -41,6 +44,16 @@ const StoreProducts = () => {
     useEffect(() => {
         fetchData();
     }, []);
+    useEffect(() => {
+        if (productId && products.length > 0) {
+            const found = products.find(p => p._id === productId);
+            if (found) setSelectedProduct(found);
+        }
+    }, [productId, products]);
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+        navigate(`/store/${slugName}`);
+    };
     return (
         <>
             <section className=' py-5 px-5 max-w-7xl mx-auto bg-wh ite h-screen'>
@@ -101,7 +114,9 @@ const StoreProducts = () => {
 
                                         {/* Action Button */}
                                         <button
-                                            onClick={() => setSelectedProduct(pkg)}
+                                            onClick={() => {setSelectedProduct(pkg) 
+                                                navigate(`/store/${slugName}/product/${pkg._id}`);
+                                            }}
                                             className="w-full mt-4 bg-green  text-white py-3 px-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2 group/btn"
                                         >
                                             <span>View Details</span>
@@ -120,7 +135,7 @@ const StoreProducts = () => {
             {selectedProduct && (
                 <SellerProductModal
                     isOpen={!!selectedProduct}
-                    onClose={() => setSelectedProduct(null)}
+                    onClose={handleCloseModal}
                     package={selectedProduct}
                     sellerDetails ={sellerDetails}
                 />
