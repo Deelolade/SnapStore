@@ -1,7 +1,7 @@
 import DashBoardGraph from './DashboardGraph'
 import { useDispatch, useSelector } from 'react-redux'
 import DashboardProductLists from './DashboardProductLists'
-import ShareLinkButton from './shareLinkButton'
+import ShareLinkButton from './ShareLinkButton'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '@clerk/clerk-react'
