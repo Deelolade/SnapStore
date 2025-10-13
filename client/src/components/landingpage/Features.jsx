@@ -21,14 +21,13 @@ const Features = () => {
         tl.to(headerRef.current, {
             y: -100,
         })
-
     }, [])
     return (
-        <section className='w-full bg-[#f8f8f9] h-auto'>
+        <section id='features' className='w-full bg-[#f8f8f9] h-auto'>
             <div className="max-w-8xl px-20 mx-auto h-auto flex  justify-between items-start bg-[#f8f8f9]">
                 <div className="bg-[#f8f8f9] px-20 py-20">
-                    <div className="" ref={headerRef}>
-                        <h1 className='text-4xl'>Some features we think you will love</h1>
+                    <div className="" >
+                        <h1 ref={headerRef} className='text-4xl'>Some features we think you will love</h1>
                         <p className='text-[16px] mt-4'>We believe every small business deserves visibility. No tech skills needed.</p>
                     </div>
                     <div className="grid grid-cols-2 gap-15 my-10">

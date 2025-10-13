@@ -9,7 +9,7 @@ const Navbar = () => {
 
   console.log(user?.fullName.toUpperCase(), user?.primaryEmailAddress.emailAddress);
   const navlinks = [
-    { name: "Features", to: "/features" },
+    { name: "Features", to: "#features" },
     { name: "How It Works", to: "/how-it-works" },
     { name: "Pricing", to: "/pricing" },
     { name: "For Sellers", to: "/sign-up" },
@@ -31,9 +31,9 @@ const Navbar = () => {
           {!isSignedIn && (
             <div className="flex space-x-8 items-center">
               {navlinks.slice(0, 3).map((link, idx) => (
-                <Link key={idx} to={link.to} className=" text-lg text-gray-600 hover:text-gray-900 transition-colors">
+                <a key={idx} href={link.to} className=" text-lg text-gray-600 hover:text-gray-900 transition-colors">
                   {link.name}
-                </Link>
+                </a>
               ))}
             </div>
           )}
