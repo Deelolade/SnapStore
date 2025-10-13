@@ -7,9 +7,9 @@ const HowItWorks = () => {
     return (
         <div>
             <section className="h-auto py-10 lg:py-20 md:px-10 bg-white" id="how-it-works">
-                <div className="text-center max-w-6xl mx-auto">
+                <div className="text-center mx-auto max-w-3xl ">
                     <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold">How It Works</h1>
-                    <p className="mt-4 text-lg md:text-xl">
+                    <p className="mt-4 text-lg md:text-xl ">
                         Getting started is simple. Create your store, showcase your products, and share your link with the world — all in minutes.
                     </p>
                 </div>

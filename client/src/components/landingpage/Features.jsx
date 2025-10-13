@@ -43,10 +43,10 @@ const Features = () => {
                                 <button className='text-lg text-green font-semibold px-5 py-2 border-2 border-green rounded-full'>See how it works </button>
                             </div>
                         </div>
-                        <div className=" shadow-xl bg-white rounded-3xl">
+                        <div className="shadow-xl bg-white rounded-3xl">
                             <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470" alt="" className='rounded-3xl h-[425px] object-cover w-full' />
                         </div>
-                        <div className=" shadow-xl bg-white rounded-3xl">
+                        <div className="shadow-xl bg-white rounded-3xl">
                             <img src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1471" alt="" className='rounded-3xl h-[425px] object-cover w-full' />
                         </div>
                         <div className="shadow-xl bg-white rounded-3xl p-10 flex flex-col justify-between">
