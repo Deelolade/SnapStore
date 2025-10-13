@@ -219,7 +219,7 @@ const SellerProductModal = ({ isOpen, onClose, package: product, sellerDetails: 
                     </div>
 
                     {/* Buttons */}
-                    <div className="mt-auto flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="mt-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <button
                         onClick={onClose}
                         className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-5 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center gap-2"

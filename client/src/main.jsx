@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -9,27 +8,37 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
-// The error occurs if the environment variable VITE_CLERK_PUBLISHABLE_KEY is not defined or not loaded correctly.
-// Make sure you have a .env file in your project root with VITE_CLERK_PUBLISHABLE_KEY set, and that you restart your dev server after adding it.
-// For debugging, let's log the value to see what is being picked up:
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 console.log("Clerk Publishable Key:", PUBLISHABLE_KEY);
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing publishable key for clerk. Make sure VITE_CLERK_PUBLISHABLE_KEY is set in your .env file.");
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 1000 * 60 * 5,
+    }
+  }
+});
+
 createRoot(document.getElementById('root')).render(
-  <PersistGate persistor={persistor}>
-    <Provider store={store}>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <Router>
-          <App />
-        </Router>
-      </ClerkProvider>
-    </Provider>
-    <ToastContainer
+  <QueryClientProvider client={queryClient}>
+
+    <PersistGate persistor={persistor}>
+      <Provider store={store}>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+          <Router>
+            <App />
+          </Router>
+        </ClerkProvider>
+      </Provider>
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -40,5 +49,6 @@ createRoot(document.getElementById('root')).render(
         draggable
         pauseOnHover
       />
-  </PersistGate>
+    </PersistGate>
+  </QueryClientProvider>
 )
