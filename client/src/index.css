@@ -18,6 +18,7 @@
 .text-green { color: #50C878; }
 .text-orange { color: #FF6B35; }
 
+.border-green{ border-color: #50C878;}
 
 body{
   background-color: #d3d3d3;

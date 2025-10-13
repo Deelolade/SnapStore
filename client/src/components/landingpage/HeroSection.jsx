@@ -8,69 +8,71 @@ import { useGSAP } from "@gsap/react";
 const HeroSection = () => {
     const heroText = useRef();
     const heroImage = useRef();
+    const buttonRef = useRef();
 
-    useGSAP(()=>{
+    useGSAP(() => {
         const tl = gsap.timeline({
-            scrollTrigger:{
+            scrollTrigger: {
                 trigger: heroImage.current,
-                start: ' 110% 50%',
-                end: ' 40% 60%',
+                start: ' 90% 70%',
+                end: ' 20% 90%',
                 scrub: true,
                 pin: heroText.current,
                 pinSpacing: false,
             }
         })
-        let ctx = gsap.context(()=>{
-            tl.to(heroImage.current,{
-                scale:1,
-                ease: 'none'
-            })
-            .to(heroText.current.querySelectorAll('p')[1],{
-                color: 'white',
-                duration: 5,
-                ease: 'none'
-            }).to(heroText.current.querySelectorAll('p')[0],{
-                color: 'white',
-                duration: 1,
-                ease: 'none'
-            })
-            .to(heroText.current.querySelectorAll('h1')[1],{
-                color: 'white',
-                duration: 1,
-                ease: 'none'
-            }).to(heroText.current.querySelectorAll('h1')[0],{
-                color: 'white',
-                duration: 3,
-                ease: 'none'
-            })
-            
+        tl.to(heroImage.current, {
+            scale: 1,
+            ease: 'none'
+        }).to(buttonRef.current, {
+            borderColor: "white",
+            color: 'white',
+            duration: 5,
+        }).to(heroText.current.querySelectorAll('p')[1], {
+            color: 'white',
+            duration: 5,
+            ease: 'none'
+        }).to(heroText.current.querySelectorAll('p')[0], {
+            color: 'white',
+            duration: 1,
+            ease: 'none'
+        }).to(heroText.current.querySelectorAll('h1')[1], {
+            color: 'white',
+            duration: 1,
+            ease: 'none'
+        }).to(heroText.current.querySelectorAll('h1')[0], {
+            color: 'white',
+            duration: 3,
+            ease: 'none'
         })
-        return ()=> ctx.revert();
+
+        return () => tl.kill();
     })
 
     return (
         <>
             <main>
-                <section className="min-h-screen flex justify-center items-center ">
+                <section className="min-h-screen flex justify-center items-center bg-white">
                     <div
-                        className="max-w-6xl gap-0 h-[316px]  hero-text z-40 "
+                        className="max-w-6xl gap-0 h-[316px] text-center  hero-text z-40 "
                         ref={heroText}
                     >
                         <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">
-                            Share your products. 
+                            Share your products.
                         </h1>
-                             <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">Build your dream.</h1>
+                        <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">Build your dream.</h1>
                         <div className="mt-10">
                             <p className="text-black font-semibold text-lg text-center">
-                                You don't need a fancy website to start. Just upload what you sell, 
+                                You don't need a fancy website to start. Just upload what you sell,
                             </p>
-                             <p className="text-black font-semibold text-lg text-center">
+                            <p className="text-black font-semibold text-lg text-center">
                                 and let people discover your brand one post at a time.
                             </p>
                         </div>
+                        <button ref={buttonRef} className=" text-lg text-black mt-4  font-semibold py-2 px-4 rounded-sm border-black border-2">Start Sharing Now</button>
                     </div>
                 </section>
-                <section className=" flex justify-center items-start ">
+                <section className="flex justify-center items-center ">
                     <div className="max-w-fit">
                         <img
                             // src={imageOne}

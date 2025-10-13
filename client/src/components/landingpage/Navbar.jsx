@@ -31,7 +31,7 @@ const Navbar = () => {
           {!isSignedIn && (
             <div className="flex space-x-8 items-center">
               {navlinks.slice(0, 3).map((link, idx) => (
-                <Link key={idx} to={link.to} className="text-gray-600 hover:text-gray-900 transition-colors">
+                <Link key={idx} to={link.to} className=" text-lg text-gray-600 hover:text-gray-900 transition-colors">
                   {link.name}
                 </Link>
               ))}
@@ -47,7 +47,7 @@ const Navbar = () => {
                 if (link.name === "For Sellers") {
                   return (
                     <SignUpButton key={idx} mode="modal" redirecturl="/dashboard">
-                      <button className="bg-green text-white px-4 py-2 rounded-3xl  font-medium hover:bg-green/90">
+                      <button className="bg-green text-white px-4 py-2 rounded-sm  font-semibold hover:bg-green/90">
                         {link.name}
                       </button>
                     </SignUpButton>
@@ -55,7 +55,7 @@ const Navbar = () => {
                 } else if (link.name === "Login") {
                   return (
                     <SignInButton key={idx} mode="modal" redirecturl="/dashboard" >
-                      <button className="bg-orange text-white px-4 py-2 rounded-3xl  font-medium hover:bg-orange/90">
+                      <button className="bg-orange text-white px-4 py-2 rounded-sm  font-semibold hover:bg-orange/90">
                         {link.name}
                       </button>
                     </SignInButton>
