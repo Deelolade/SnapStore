@@ -1,6 +1,7 @@
 import About from '@/components/landingpage/About'
 import CTA from '@/components/landingpage/CTA'
 import Features from '@/components/landingpage/Features'
+import Footer from '@/components/landingpage/Footer'
 import HeroSection from '@/components/landingpage/HeroSection'
 import HowItWorks from '@/components/landingpage/HowItWorks'
 import Navbar from '@/components/landingpage/Navbar'
@@ -18,6 +19,7 @@ const Index = () => {
         <HowItWorks/>
         <Pricings/>
         <CTA/>
+        <Footer/>
       </SmoothScroll>
     </div>
   )
