@@ -45,7 +45,7 @@ const HowItWorks = () => {
                 <div className="text-center mt-16">
                     <a
                         href="/signup"
-                        className="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-green-600 text-white text-lg font-semibold hover:bg-white hover:text-green-600 border-2 border-green-600  transition"
+                        className="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-green text-white text-lg font-semibold transition"
                     >
                         Get Started Free <FaArrowRightLong />
                     </a>

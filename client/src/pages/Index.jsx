@@ -1,4 +1,5 @@
 import About from '@/components/landingpage/About'
+import CTA from '@/components/landingpage/CTA'
 import Features from '@/components/landingpage/Features'
 import HeroSection from '@/components/landingpage/HeroSection'
 import HowItWorks from '@/components/landingpage/HowItWorks'
@@ -16,6 +17,7 @@ const Index = () => {
         {/* <About /> */}
         <HowItWorks/>
         <Pricings/>
+        <CTA/>
       </SmoothScroll>
     </div>
   )

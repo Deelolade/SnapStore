@@ -11,7 +11,7 @@ const Navbar = () => {
   const navlinks = [
     { name: "Features", to: "#features" },
     { name: "How It Works", to: "#how-it-works" },
-    { name: "Pricing", to: "/pricing" },
+    { name: "Pricing", to: "#pricing" },
     { name: "For Sellers", to: "/sign-up" },
     { name: "Login", to: "/sign-in" }        
   ]
