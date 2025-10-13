@@ -10,7 +10,7 @@ const Navbar = () => {
   console.log(user?.fullName.toUpperCase(), user?.primaryEmailAddress.emailAddress);
   const navlinks = [
     { name: "Features", to: "#features" },
-    { name: "How It Works", to: "/how-it-works" },
+    { name: "How It Works", to: "#how-it-works" },
     { name: "Pricing", to: "/pricing" },
     { name: "For Sellers", to: "/sign-up" },
     { name: "Login", to: "/sign-in" }        
@@ -27,7 +27,7 @@ const Navbar = () => {
       <nav className='flex justify-between items-center h-[8vh] px-6 py-4 bg-white  max-w-6xl mx-auto'>
         {/* Left - Logo and first 3 links */}
         <div className="flex items-center justify-between w-[60%]">
-          <h2 className='text-3xl font-bold text-gray-900'>SnapStore</h2>
+          <a href='#' className='text-3xl font-bold text-gray-900'>SnapStore</a>
           {!isSignedIn && (
             <div className="flex space-x-8 items-center">
               {navlinks.slice(0, 3).map((link, idx) => (

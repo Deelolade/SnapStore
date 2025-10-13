@@ -24,7 +24,9 @@ body{
   background-color: #d3d3d3;
 font-family: "Poppins", sans-serif;
 }
-
+html{
+  scroll-behavior: smooth;
+}
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

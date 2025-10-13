@@ -12,7 +12,7 @@ const Index = () => {
         <Navbar />
         <HeroSection />
         <Features/>
-        <About />
+        {/* <About /> */}
         <HowItWorks/>
       </SmoothScroll>
     </div>
