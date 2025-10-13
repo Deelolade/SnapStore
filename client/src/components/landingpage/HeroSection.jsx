@@ -14,8 +14,8 @@ const HeroSection = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: heroImage.current,
-                start: ' 90% 70%',
-                end: ' 20% 90%',
+                start: ' 100% 10%',
+                end: ' 30% 90%',
                 scrub: true,
                 pin: heroText.current,
                 pinSpacing: false,
@@ -54,7 +54,7 @@ const HeroSection = () => {
             <main>
                 <section className="min-h-screen flex justify-center items-center bg-white">
                     <div
-                        className="max-w-6xl gap-0 h-[316px] text-center  hero-text z-40 "
+                        className="max-w-6xl h-[316px] text-center hero-text z-40 "
                         ref={heroText}
                     >
                         <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">

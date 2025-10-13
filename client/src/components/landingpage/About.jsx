@@ -3,12 +3,12 @@ import React from 'react'
 const About = () => {
   return (
     <>
-            <main className='w-full bg-white'>
-                <section className="max-w-7xl  mx-auto h-screen flex  justify-between items-center bg-white">
-                   About section
-                </section>
-            </main>
-        </>
+      <section className='w-full bg-white'>
+        <div className="max-w-7xl  mx-auto h-screen flex  justify-between items-center bg-white">
+          About section
+        </div>
+      </section>
+    </>
   )
 }
 
