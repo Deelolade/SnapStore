@@ -13,11 +13,11 @@ const Navbar = () => {
   const lastYRef = useRef(window.scrollY);
   const [hidden, setHidden] = useState(false);
   const [scrolledTop, setScrolledTop] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const { user, isSignedIn } = useUser();
 
-  // console.log(user?.fullName.toUpperCase(), user?.primaryEmailAddress.emailAddress);
   const navlinks = [
     { name: "Features", to: "#features" },
     { name: "How It Works", to: "#how-it-works" },
@@ -57,11 +57,11 @@ const Navbar = () => {
       <nav className="flex justify-between items-center h-[8vh] px-6 py-4 bg-white  max-w-6xl mx-auto">
         {/* Left - Logo and first 3 links */}
         <div className="flex items-center justify-between w-[60%]">
-          <a href="#" className="text-3xl font-bold text-gray-900">
+          <a href="#" className="text-lg 2xl:text-2xl font-bold text-gray-900">
             SnapStore
           </a>
           {!isSignedIn && (
-            <div className="flex space-x-8 items-center">
+            <div className="hidden md:flex space-x-4 2xl:space-x-8 items-center">
               {navlinks.slice(0, 3).map((link, idx) => (
                 <a
                   key={idx}
@@ -76,7 +76,7 @@ const Navbar = () => {
         </div>
 
         {/* Right - Auth buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-4">
           <>
             {!isSignedIn &&
               navlinks.slice(3).map((link, idx) => {
@@ -114,7 +114,24 @@ const Navbar = () => {
             )}
           </>
         </div>
+        <button className="md:hidden flex flex-col justify-center items-center space-y-1 hover:bg-slate-100 p-2 rounded-md" onClick={() => setMenuOpen(prev => !prev)}>
+          <span className={`w-5 h-[2px] bg-black transition-all ease-in-out duration-500 ${menuOpen && "rotate-45 translate-y-1.5  "}`}></span>
+          <span className={`w-5 h-[2px] bg-black transition-all ease-in-out duration-500 ${menuOpen && "-rotate-45  "}`}></span>
+          <span className={`w-5 h-[2px] bg-black transition-all ease-in-out duration-500 ${menuOpen && "opacity-0"}`}></span>
+        </button>
       </nav>
+      <div
+        className={`${menuOpen ? "opacity-0 -translate-x-64":''} transition duration-500 bg-white absolute top-[8vh] md:top-[10vh] h-[92vh] w-full md:hidden flex flex-col justify-start items-center pt-10 space-y-6`}>
+        <ul className=" space-y-6 text-center">
+          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Packages</a></li>
+          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">About us</a></li>
+          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Contact us</a></li>
+          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Blog</a></li>
+        </ul>
+        {/* <Link to="/signup" className=" bg-orange text-white text-lg font-medium py-2 px-4 rounded-lg">
+          Register
+        </Link> */}
+      </div>
     </header>
   );
 };
