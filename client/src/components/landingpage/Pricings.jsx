@@ -1,4 +1,4 @@
-import { GrCheckmark } from "react-icons/gr";
+import imageOne from '@images/pricings.avif'
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 const Pricings = () => {
     return (
@@ -33,7 +33,7 @@ const Pricings = () => {
                         </button>
                     </div>
                     <div className="">
-                        <img src="https://plus.unsplash.com/premium_photo-1678824564926-94a16547b42d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687" className="h-[600px] object-cover rounded-r-3xl w-full" alt="" />
+                        <img src={imageOne} className="h-[600px] object-cover rounded-r-3xl w-full" alt="" />
                     </div>
                 </div>
             </section>

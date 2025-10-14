@@ -11,42 +11,83 @@ const HeroSection = () => {
     const buttonRef = useRef();
 
     useGSAP(() => {
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: heroImage.current,
-                start: ' 100% 10%',
-                end: ' 30% 90%',
-                scrub: true,
-                pin: heroText.current,
-                pinSpacing: false,
+        ScrollTrigger.matchMedia({
+            '(min-width:768px)': function () {
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: heroImage.current,
+                        start: ' 100% 10%',
+                        end: ' 30% 90%',
+                        scrub: true,
+                        pin: heroText.current,
+                        pinSpacing: false,
+                    }
+                })
+                tl.to(heroImage.current, {
+                    scale: 1,
+                    ease: 'none'
+                }).to(buttonRef.current, {
+                    borderColor: "white",
+                    color: 'white',
+                    duration: 5,
+                }).to(heroText.current.querySelectorAll('p')[1], {
+                    color: 'white',
+                    duration: 5,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('p')[0], {
+                    color: 'white',
+                    duration: 1,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('h1')[1], {
+                    color: 'white',
+                    duration: 1,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('h1')[0], {
+                    color: 'white',
+                    duration: 3,
+                    ease: 'none'
+                })
+
+            },
+            '(max-width:767px)': function () {
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: heroImage.current,
+                        start: ' 100% 100%',
+                        end: ' 30% 10%',
+                        scrub: true,
+                        pin: heroText.current,
+                        pinSpacing: false,
+                    }
+                })
+                tl.to(heroImage.current, {
+                    scale: 1,
+                    ease: 'none'
+                }).to(buttonRef.current, {
+                    borderColor: "white",
+                    color: 'white',
+                    duration: 5,
+                }).to(heroText.current.querySelectorAll('p')[1], {
+                    color: 'white',
+                    duration: 5,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('p')[0], {
+                    color: 'white',
+                    duration: 3,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('h1')[1], {
+                    color: 'white',
+                    duration: 3,
+                    ease: 'none'
+                }).to(heroText.current.querySelectorAll('h1')[0], {
+                    color: 'white',
+                    duration: 3,
+                    ease: 'none'
+                })
+
             }
         })
-        tl.to(heroImage.current, {
-            scale: 1,
-            ease: 'none'
-        }).to(buttonRef.current, {
-            borderColor: "white",
-            color: 'white',
-            duration: 5,
-        }).to(heroText.current.querySelectorAll('p')[1], {
-            color: 'white',
-            duration: 5,
-            ease: 'none'
-        }).to(heroText.current.querySelectorAll('p')[0], {
-            color: 'white',
-            duration: 1,
-            ease: 'none'
-        }).to(heroText.current.querySelectorAll('h1')[1], {
-            color: 'white',
-            duration: 1,
-            ease: 'none'
-        }).to(heroText.current.querySelectorAll('h1')[0], {
-            color: 'white',
-            duration: 3,
-            ease: 'none'
-        })
-
-        return () => tl.kill();
+        // return () => tl.kill();
     })
 
     return (
@@ -57,7 +98,7 @@ const HeroSection = () => {
                         className="max-w-6xl h-[316px] text-center hero-text z-40 "
                         ref={heroText}
                     >
-                        <h1 className="md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">
+                        <h1 className="text-[30px] md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">
                             Share your products.
                         </h1>
                         <h1 className="md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">Build your dream.</h1>
@@ -82,7 +123,6 @@ const HeroSection = () => {
                         />
                     </div>
                 </section>
-                {/* <Overview/> */}
             </main>
         </>
     );
