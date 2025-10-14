@@ -14,14 +14,14 @@ const Features = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: headerRef.current,
-                start: "top top",
+                start: "top center",
                 end: "bottom top",
                 scrub: true,
                 pinSpacing: false,
             }
         })
-        tl.to(headerRef.current, {
-            y: -100,
+        tl.from(headerRef.current, {
+            y: -50,
         })
     }, [])
     return (
