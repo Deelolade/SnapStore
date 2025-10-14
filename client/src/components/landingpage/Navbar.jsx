@@ -121,16 +121,23 @@ const Navbar = () => {
         </button>
       </nav>
       <div
-        className={`${menuOpen ? "opacity-0 -translate-x-64":''} transition duration-500 bg-white absolute top-[8vh] md:top-[10vh] h-[92vh] w-full md:hidden flex flex-col justify-start items-center pt-10 space-y-6`}>
+        className={`${menuOpen ? "opacity-100 translate-x-0 pointer-events-auto" : 'opacity-0 -translate-x-64 pointer-events-none'} transition-all duration-500 ease-in-out origin-top bg-white absolute top-[8vh] md:top-[10vh] h-[92vh] w-full md:hidden flex flex-col justify-start items-center pt-10 space-y-6`}>
         <ul className=" space-y-6 text-center">
-          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Packages</a></li>
-          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">About us</a></li>
-          <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Contact us</a></li>
+          <li><a href="#features" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Features</a></li>
+          <li><a href="#how-it-works" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">How it works</a></li>
+          <li><a href="#pricing" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Pricings</a></li>
           <li><a href="#" onClick={() => setMenuOpen(prev => !prev)} className="text-4xl font-semibold">Blog</a></li>
         </ul>
-        {/* <Link to="/signup" className=" bg-orange text-white text-lg font-medium py-2 px-4 rounded-lg">
-          Register
-        </Link> */}
+        <SignInButton
+          mode="modal"
+          redirecturl="/dashboard"
+        >
+          <button
+            onClick={() => setMenuOpen(prev => !prev)}
+           className=" bg-orange text-white text-sm font-medium py-2 px-4 rounded-sm">
+            Sign Up
+          </button>
+        </SignInButton>
       </div>
     </header>
   );

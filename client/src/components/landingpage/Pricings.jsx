@@ -1,3 +1,4 @@
+import { SignUpButton } from '@clerk/clerk-react';
 import imageOne from '@images/pricings.avif'
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 const Pricings = () => {
@@ -28,9 +29,14 @@ const Pricings = () => {
                                 <IoCheckmarkDoneSharp className="text-2xl text-orange"/> No hidden fees, no hassle
                             </li>
                         </ul>
+                        <SignUpButton
+                            mode="modal"
+                            redirecturl="/dashboard"
+                        >
                         <button className="bg-orange text-white px-4 2xl:px-6 py-2 2xl:py-3 rounded-sm font-semibold transition">
                             Get Started Free
                         </button>
+                        </SignUpButton>
                     </div>
                     <div className="hidden md:block">
                         <img src={imageOne} className="h-[600px] object-cover rounded-r-sm w-full" alt="" />

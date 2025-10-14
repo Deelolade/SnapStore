@@ -3,6 +3,7 @@ import { VscNewFolder } from "react-icons/vsc";
 import { HiOutlineCheckBadge } from "react-icons/hi2";
 import { TbWorldShare } from "react-icons/tb";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { SignUpButton } from "@clerk/clerk-react";
 const HowItWorks = () => {
     return (
         <div>
@@ -32,23 +33,27 @@ const HowItWorks = () => {
                             Upload your products, set your price, and add images that make them shine. Everything stays organized for you.
                         </p>
                     </div>
-                    <div className=" text-center p-2  w-fit">
+                    <div className=" text-center p-2 md:col-span-2 xl:col-span-1 w-fit">
                         <span className="flex justify-center">
                             <TbWorldShare className="text-6xl lg:text-8xl text-orange" />
                         </span>
                         <h4 className="text-xl md:text-2xl my-3 md:my-6">Share your store</h4>
-                        <p className="text-sm md:text-lg">
+                        <p className="text-sm md:text-lg md:max-w-lg">
                             Get your unique link and start sharing it on WhatsApp, Instagram, or anywhere your customers hang out.
                         </p>
                     </div>
                 </div>
                 <div className="text-center mt-4 md:mt-10 2xl:mt-16">
-                    <a
-                        href="/signup"
-                        className="inline-flex items-center gap-2 px-5 2xl:px-8 py-2 2xl:py-4 rounded-sm bg-green text-white text-sm md:text-lg font-semibold transition"
+                    <SignUpButton
+                        mode="modal"
+                        redirecturl="/dashboard"
                     >
-                        Get Started Free <FaArrowRightLong />
-                    </a>
+                        <a
+                            className="inline-flex items-center gap-2 px-5 2xl:px-8 py-2 2xl:py-4 rounded-sm bg-green text-white text-sm md:text-lg font-semibold transition"
+                        >
+                            Get Started Free <FaArrowRightLong />
+                        </a>
+                    </SignUpButton>
                     <p className="mt-3 2xl:mt-6 text-gray-500 text-sm">No credit card required • Takes less than a minute</p>
                 </div>
 
