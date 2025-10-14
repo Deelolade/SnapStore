@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import gsap from "gsap";
-// import imageOne from "../../images/overview-one.webp";
+import imageOne from "@images/hero-BG.avif";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 import { useGSAP } from "@gsap/react";
@@ -57,11 +57,11 @@ const HeroSection = () => {
                         className="max-w-6xl h-[316px] text-center hero-text z-40 "
                         ref={heroText}
                     >
-                        <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">
+                        <h1 className="md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">
                             Share your products.
                         </h1>
-                        <h1 className="text-[100px] font-semibold text-black text-center leading-[110px]">Build your dream.</h1>
-                        <div className="mt-10">
+                        <h1 className="md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">Build your dream.</h1>
+                        <div className="md:mt-6 2xl:mt-10">
                             <p className="text-black font-semibold text-lg text-center">
                                 You don't need a fancy website to start. Just upload what you sell,
                             </p>
@@ -75,11 +75,10 @@ const HeroSection = () => {
                 <section className="flex justify-center items-center ">
                     <div className="max-w-fit">
                         <img
-                            // src={imageOne}
-                            src="https://images.unsplash.com/photo-1556745753-b2904692b3cd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1373"
+                            src={imageOne}
                             alt="image-one"
                             ref={heroImage}
-                            className="image-one w-screen h-[500px] object-cover"
+                            className="image-one w-screen md:h-[400px] 2xl:h-[500px] object-cover"
                         />
                     </div>
                 </section>
