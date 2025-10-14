@@ -98,7 +98,7 @@ const HeroSection = () => {
                         className="max-w-6xl h-[316px] text-center hero-text z-40 "
                         ref={heroText}
                     >
-                        <h1 className="text-[30px] md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">
+                        <h1 className="text-[30px] md:text-[55px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">
                             Share your products.
                         </h1>
                         <h1 className="md:text-[60px] 2xl:text-[100px] font-semibold text-black text-center 2xl:leading-[110px]">Build your dream.</h1>

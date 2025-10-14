@@ -27,7 +27,7 @@ const Features = () => {
     return (
         <section id='features' className='w-full bg-[#f8f8f9] h-auto'>
             <div className="max-w-8xl 2xl:px-20 mx-auto h-auto flex  justify-between items-start bg-[#f8f8f9]">
-                <div className="bg-[#f8f8f9] px-4 2xl:px-20 py-20">
+                <div className="bg-[#f8f8f9] px-4 2xl:px-20 py-10 2xl:py-20">
                     <div className="text-center" >
                         <h1 ref={headerRef} className='text-lg md:text-2xl 2xl:text-4xl'>Some features we think you will love</h1>
                         <p className='text-[16px] mt-2 2xl:mt-4'>We believe every small business deserves visibility. No tech skills needed.</p>
