@@ -9,7 +9,7 @@ const HowItWorks = () => {
             <section className="h-auto py-10 lg:py-20 px-3 md:px-10 bg-white" id="how-it-works">
                 <div className="text-center mx-auto max-w-3xl ">
                     <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold md:font-normal">How It Works</h1>
-                    <p className="mt-2 md:mt-4 text-sm md:text-xl ">
+                    <p className="mt-2 md:mt-4 text-sm md:text-xl">
                         Getting started is simple. Create your store, showcase your products, and share your link with the world — all in minutes.
                     </p>
                 </div>
@@ -32,7 +32,7 @@ const HowItWorks = () => {
                             Upload your products, set your price, and add images that make them shine. Everything stays organized for you.
                         </p>
                     </div>
-                    <div className=" text-center p-2 bg-red-50 md:col-span-2 w-fit">
+                    <div className=" text-center p-2  w-fit">
                         <span className="flex justify-center">
                             <TbWorldShare className="text-6xl lg:text-8xl text-orange" />
                         </span>
@@ -42,14 +42,14 @@ const HowItWorks = () => {
                         </p>
                     </div>
                 </div>
-                <div className="text-center md:mt-10 2xl:mt-16">
+                <div className="text-center mt-4 md:mt-10 2xl:mt-16">
                     <a
                         href="/signup"
-                        className="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-green text-white text-lg font-semibold transition"
+                        className="inline-flex items-center gap-2 px-5 2xl:px-8 py-2 2xl:py-4 rounded-sm bg-green text-white text-sm md:text-lg font-semibold transition"
                     >
                         Get Started Free <FaArrowRightLong />
                     </a>
-                    <p className="mt-6 text-gray-500 text-sm">No credit card required • Takes less than a minute</p>
+                    <p className="mt-3 2xl:mt-6 text-gray-500 text-sm">No credit card required • Takes less than a minute</p>
                 </div>
 
             </section>
