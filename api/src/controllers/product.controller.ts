@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { RequestHandler } from "express";
 import { Product } from "../models/product.model";
 import { AuthenticatedRequest } from "../utils/authMiddleware";
 import { User } from "../models/user.model";
@@ -7,7 +8,7 @@ import { ProductClick, ProductView } from "../models/productStat.model";
 import mongoose from "mongoose";
 
 
-export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     const { slug, sellerId } = req.params;
     const products = await Product.find({ sellerId });
@@ -26,19 +27,21 @@ export const deleteProducts = async (req: AuthenticatedRequest, res: Response, n
   console.log("new item", req.params)
   const { id: productId } = req.params;
   if (!productId) {
-    return res.status(400).json({
+     res.status(400).json({
       success: false,
       message: "Product ID is required",
     });
+    return;
   }
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
     if (!deletedProduct) {
-      return res.status(404).json({
+        res.status(404).json({
         success: false,
         message: "Product not found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -51,18 +54,19 @@ export const deleteProducts = async (req: AuthenticatedRequest, res: Response, n
   }
 }
 
-export const createProduct = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  console.log("BODY:", req.body);       // should now have title, description, etc.
-  console.log("FILES:", req.files);
-  //   const sellerId = req.user; 
+export const createProduct = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {  
   try {
     const user = await User.findOne({ clerkId: req.user });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user){
+      res.status(404).json({ message: "User not found" });
+      return;
+    } 
 
     const { title, description, price, category, socialMedia } = req.body;
 
     if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
-      return res.status(400).json({ error: "No images uploaded" });
+      res.status(400).json({ error: "No images uploaded" });
+      return;
     }
 
     const imageUrls = await uploadImages(req.files as Express.Multer.File[]);
@@ -85,7 +89,7 @@ export const createProduct = async (req: AuthenticatedRequest, res: Response, ne
   }
 }
 
-export const getMyProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const getMyProducts = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const clerkUserId = req.user; // This is the Clerk user ID
 
@@ -129,17 +133,19 @@ export const getMyProducts = async (req: AuthenticatedRequest, res: Response, ne
     next(error)
   }
 }
-export const createProductView = async (req: Request, res: Response, next: NextFunction) => {
+export const createProductView = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { productId } = req.params;
     const ipAddress = req.ip;
     if (!productId) {
-      return res.status(400).json({ success: false, message: "Product ID is required" });
+      res.status(400).json({ success: false, message: "Product ID is required" });
+      return;
     }
 
     const existingView = await ProductView.findOne({ productId, ipAddress });
     if (!existingView || Date.now() - existingView.createdAt.getTime() > 60 * 60 * 1000) {
       await ProductView.create({ productId, ipAddress });
+      return;
     }
     const totalViews = await ProductView.countDocuments({ productId })
     res.status(200).json({
@@ -150,17 +156,19 @@ export const createProductView = async (req: Request, res: Response, next: NextF
     next(error)
   }
 }
-export const createProductClicks = async (req: Request, res: Response, next: NextFunction) => {
+export const createProductClicks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { productId } = req.params;
     const ipAddress = req.ip;
     if (!productId) {
-      return res.status(400).json({ success: false, message: "Product ID is required" });
+      res.status(400).json({ success: false, message: "Product ID is required" });
+      return;
     }
 
     const existingClick = await ProductClick.findOne({ productId, ipAddress });
     if (!existingClick || Date.now() - existingClick.createdAt.getTime() > 60 * 60 * 1000) {
       await ProductClick.create({ productId, ipAddress });
+      return;
     }
     const totalClicks = await ProductClick.countDocuments({ productId })
     res.status(200).json({
@@ -172,12 +180,13 @@ export const createProductClicks = async (req: Request, res: Response, next: Nex
   }
 }
 
-export const getProductStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const getProductStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { productId } = req.params;
 
     if (!productId) {
-      return res.status(400).json({ success: false, message: "Product ID is required" });
+      res.status(400).json({ success: false, message: "Product ID is required" });
+      return;
     }
     const product = await Product.findById(productId)
     const totalViews = await ProductView.countDocuments({
@@ -198,12 +207,13 @@ export const getProductStats = async (req: AuthenticatedRequest, res: Response, 
   }
 }
 
-export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const clerkUserId = req.user; // Clerk user ID
 
     if (!clerkUserId) {
-      return res.status(401).json({ message: "Unauthorized! Seller not found" });
+      res.status(401).json({ message: "Unauthorized! Seller not found" });
+      return;
     }
 
     // Number of days for analytics, default 7
@@ -219,7 +229,8 @@ export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Res
     // Find seller in database
     const user = await User.findOne({ clerkId: clerkUserId });
     if (!user) {
-      return res.status(404).json({ message: "User not found in database" });
+      res.status(404).json({ message: "User not found in database" });
+      return;
     }
 
     // Fetch all products for this seller
@@ -274,7 +285,7 @@ export const getMyProductsAnalytics = async (req: AuthenticatedRequest, res: Res
       })
     );
 
-    return res.status(200).json({
+     res.status(200).json({
       success: true,
       products: productsWithAnalytics,
       days,

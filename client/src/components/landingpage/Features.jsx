@@ -15,12 +15,12 @@ const Features = () => {
             scrollTrigger: {
                 trigger: headerRef.current,
                 start: "top center",
-                end: "bottom top",
+                end: "bottom center",
                 scrub: true,
                 pinSpacing: false,
             }
         })
-        tl.from(headerRef.current, {
+        tl.fromTo(headerRef.current, {
             y: -50,
         })
     }, [])

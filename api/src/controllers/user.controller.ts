@@ -1,15 +1,19 @@
-import { Request, Response } from "express";
-import { RequireAuthProp, clerkClient } from "@clerk/clerk-sdk-node";
+import { RequestHandler, NextFunction, Request, Response } from "express";
+import { clerkClient } from "@clerk/express";
 import { User } from "../models/user.model";
-import { uploadImage, } from "../utils/cloudinary";
+import { uploadImage } from "../utils/cloudinary";
+import { AuthenticatedRequest } from "../utils/authMiddleware";
 
+interface ClerkRequest extends Request {
+  auth: {
+    userId: string;
+  }
+}
 
-type ClerkRequest = RequireAuthProp<Request>
+export const clerkUserAuth = async (req: AuthenticatedRequest, res: Response, next:NextFunction) =>{
 
-export const clerkUserAuth = async (req: ClerkRequest, res: Response) => {
-  const { userId } = req.auth;
-  console.log("Clerk userId:", userId);
-  console.log(req.auth)
+  try {
+  const { userId } = (req as ClerkRequest ).auth;
 
   let user = await User.findOne({ clerkId: userId })
 
@@ -18,26 +22,30 @@ export const clerkUserAuth = async (req: ClerkRequest, res: Response) => {
 
     user = await User.create({
       clerkId: userId,
-      name: newUser.firstName + " " + newUser.lastName,
+      name: `${newUser.firstName ?? ""} ${newUser.lastName ?? ""}`.trim(),
       email: newUser.emailAddresses[0].emailAddress,
       profilePicture: "https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png", // Default placeholder image
     })
   }
   res.status(200).json({ message: "User synced successfully", user })
   console.log(user)
+  } catch (error) {
+    next(error)
+  }
 }
 
-export const updateUserProfile = async (req: ClerkRequest, res: Response) => {
+export const updateUserProfile: RequestHandler = async (req, res, next) => {
   try {
-    const { userId } = req.auth;
+    const { userId } = (req as ClerkRequest).auth;
     const { name, email, storeSlug, socialMedia, whatsappNumber, profilePictureUrl } = req.body;
     console.log(req.body)
-    let updatedFields = {
+
+    const updatedFields: Record<string, any> = {
       name,
       email,
       storeSlug,
       whatsappNumber,
-      socialMedia: JSON.parse(socialMedia)
+      socialMedia: socialMedia ? JSON.parse(socialMedia) : undefined,
     };
     if (req.file) {
       const imageUrl = await uploadImage(req.file);
@@ -53,7 +61,8 @@ export const updateUserProfile = async (req: ClerkRequest, res: Response) => {
       { new: true, runValidators: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" })
+      res.status(404).json({ message: "User not found" });
+      return;
     }
     // update user
     const [firstName, ...lastNameParts] = name.split(" ");
@@ -62,10 +71,8 @@ export const updateUserProfile = async (req: ClerkRequest, res: Response) => {
     await clerkClient.users.updateUser(userId, {
       firstName,
       lastName,
-      profileImageUrl : profilePictureUrl
     });
 
-    console.log("Profile updated successfully:", updatedUser);
     res.status(200).json({
       message: "Profile updated successfully",
       user: updatedUser

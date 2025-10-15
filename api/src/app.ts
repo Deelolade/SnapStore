@@ -1,12 +1,12 @@
 import express from "express"
-import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import { userRouter } from "./routes/user.route";
+import { clerkMiddleware } from "@clerk/express";
 import { productRouter } from "./routes/product.route"
 import { connectDB } from "./config/db";
 import cors from "cors"
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser"
-import { FRONTEND_URL, CLERK_SECRET_KEY } from "./config/env";
+import { FRONTEND_URL } from "./config/env";
 import { storeRouter } from "./routes/store.route";
 
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(cors({
 const PORT = 3000 
 connectDB()
 app.use(express.json());
-app.use(ClerkExpressWithAuth({ secretKey: CLERK_SECRET_KEY }));
+app.use(clerkMiddleware());
 
 app.get("/", (req, res)=>{
     res.json("hello world !!")
