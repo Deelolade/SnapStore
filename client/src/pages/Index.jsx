@@ -1,13 +1,26 @@
-import Navbar from '@/components/Navbar'
-import { SignUp } from '@clerk/clerk-react'
-import React from 'react'
+import About from '@/components/landingpage/About'
+import CTA from '@/components/landingpage/CTA'
+import Features from '@/components/landingpage/Features'
+import Footer from '@/components/landingpage/Footer'
+import HeroSection from '@/components/landingpage/HeroSection'
+import HowItWorks from '@/components/landingpage/HowItWorks'
+import Navbar from '@/components/landingpage/Navbar'
+import Pricings from '@/components/landingpage/Pricings'
+import SmoothScroll from '@/components/landingpage/SmoothScroll'
 
 const Index = () => {
   return (
     <div>
-      <Navbar/>
-      <h2 className='text-5xl'>hello world </h2>
-      <h2 className='text-5xl'>landing page</h2>
+      <SmoothScroll>
+        <Navbar />
+        <HeroSection />
+        <Features/>
+        {/* <About /> */}
+        <HowItWorks/>
+        <Pricings/>
+        <CTA/>
+        <Footer/>
+      </SmoothScroll>
     </div>
   )
 }

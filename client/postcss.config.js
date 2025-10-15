@@ -1,7 +1,6 @@
+import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
+
 export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
+  plugins: [tailwindcss(), autoprefixer()],
 }
-// Yes, this configuration will work for a typical Vite + Tailwind CSS setup.

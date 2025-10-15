@@ -17,3 +17,17 @@ export const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY as string;
 if (!CLERK_SECRET_KEY) {
     throw new Error("CLERK_SECRET_KEY is not defined in .env")
 }
+
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME as string;
+if (!CLOUDINARY_CLOUD_NAME) {
+    throw new Error("CLOUDINARY_CLOUD_NAME is not defined in .env")
+}
+
+export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY as string;
+if (!CLOUDINARY_API_KEY) {
+    throw new Error("CLOUDINARY_API_KEY is not defined in .env")
+}
+export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET as string;
+if (!CLOUDINARY_API_SECRET) {
+    throw new Error("CLOUDINARY_API_SECRET is not defined in .env")
+}

@@ -1,15 +1,38 @@
 @import "tw-animate-css";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Custom color classes as fallback */
+.bg-blue { background-color: #0056D2; }
+.bg-red { background-color: #D04715; }
+.bg-green { background-color: #50C878; }
+.bg-orange { background-color: #FF6B35; }
+.bg-lightblue { background-color: #0056D2; }
+.bg-lightpurple { background-color: #C5C5E2; }
+.bg-lightorange { background-color: #FFC8AB; }
+.bg-lightgray { background-color: #F5F5F54D; }
 
+.text-blue { color: #0056D2; }
+.text-red { color: #D04715; }
+.text-green { color: #50C878; }
+.text-orange { color: #FF6B35; }
+
+.border-green{ border-color: #50C878;}
 
 body{
   background-color: #d3d3d3;
 font-family: "Poppins", sans-serif;
+}
+html{
+  scroll-behavior: smooth;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 
