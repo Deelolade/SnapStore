@@ -13,10 +13,16 @@ dotenv.config();
 
 const app= express();
 app.use(cookieParser())
-app.use(cors({
-    origin: FRONTEND_URL, 
-    credentials: true,  
-}))
+
+const allowedOrigins =[ FRONTEND_URL, 'http://localhost:5173']
+app.use( cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  }))
 const PORT = 3000 
 connectDB()
 app.use(express.json());
