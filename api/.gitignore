@@ -1,9 +1,17 @@
-# Node modules
+# Ignore all node_modules and build outputs
 node_modules/
-
-# Build outputs
 dist/
 build/
+api/node_modules/
+client/node_modules/
+api/dist/
+client/dist/
+
+# Ignore environment files
+.env
+.env.local
+client/.env
+api/.env
 
 # Logs
 npm-debug.log*
