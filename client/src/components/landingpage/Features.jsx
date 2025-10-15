@@ -20,9 +20,9 @@ const Features = () => {
                 pinSpacing: false,
             }
         })
-        tl.fromTo(headerRef.current, {
-            y: -50,
-        })
+        // tl.fromTo(headerRef.current, {
+        //     y: -50,
+        // })
     }, [])
     return (
         <section id='features' className='w-full bg-[#f8f8f9] h-auto'>
